@@ -10,6 +10,7 @@
 | Nama | NIM | Peran | Tanggung Jawab |
 | :--- | :--- | :--- | :--- |
 | LALU ADITYA RAMADHANI | F1D02410063 | **Fullstack Developer** | Merancang dan mengimplementasikan seluruh antarmuka pengguna (UI/UX) yang responsif dan interaktif, membangun API Routes, sistem autentikasi, dan integrasi database. |
+| DESWITA SALSABILA | F1D02410004 |  | |
 
 ---
 
