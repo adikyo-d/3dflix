@@ -11,7 +11,7 @@
 | :--- | :--- | :--- | :--- |
 | LALU ADITYA RAMADHANI | F1D02410063 | **Fullstack Developer** | Merancang dan mengimplementasikan seluruh antarmuka pengguna (UI/UX) yang responsif dan interaktif, membangun API Routes, sistem autentikasi, dan integrasi database. |
 | DESWITA SALSABILA | F1D02410004 |  | |
-| ROSIDA ASRI ARDIANI | F1D02410142 |  **Backend Developer** | Membantu pengelolaan database MySQL, membuat dan menghubungkan API untuk review, watchlist, dan autentikasi pengguna, serta memastikan data tersimpan dengan baik. |
+| ROSIDA ASRI ARDIANI | F1D02410142 |  **Backend Developer** | Membantu pengelolaan database MySQL, watchlist, dan autentikasi pengguna, serta memastikan data tersimpan dengan baik. |
 
 ---
 
