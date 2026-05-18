@@ -10,7 +10,9 @@
 | Nama | NIM | Peran | Tanggung Jawab |
 | :--- | :--- | :--- | :--- |
 | LALU ADITYA RAMADHANI | F1D02410063 | **Fullstack Developer** | Merancang dan mengimplementasikan seluruh antarmuka pengguna (UI/UX) yang responsif dan interaktif, membangun API Routes, sistem autentikasi, dan integrasi database. |
-| DESWITA SALSABILA | F1D02410004 | **Frontend Developer & UI/UX Designer** | Mendesain dan mengembangkan tampilan antarmuka aplikasi menggunakan Tailwind CSS, membuat halaman yang responsif dan interaktif, serta membantu integrasi frontend dengan API dan sistem autentikasi. |
+| DESWITA SALSABILA | F1D02410004 | **Frontend Developer & UI/UX Designer**| Mendesain dan mengembangkan tampilan antarmuka aplikasi menggunakan Tailwind CSS, membuat halaman yang responsif dan interaktif, serta membantu integrasi frontend dengan API dan sistem autentikasi. |
+| ROSIDA ASRI ARDIANI | F1D02410142 |  **Backend Developer** | Membantu pengelolaan database MySQL, watchlist, dan autentikasi pengguna, serta memastikan data tersimpan dengan baik. |
+>>>>>>> 8d7f3853492e14afa5155159e9e3dff2072aea5f
 
 ---
 
