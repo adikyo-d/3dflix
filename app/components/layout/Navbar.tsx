@@ -24,7 +24,7 @@ export default function Navbar() {
   const [searchVal, setSearchVal] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // --- SESSION dari Auth.js (menggantikan localStorage) ---
+  // --- SESSION dari Auth.js
   const { data: session, status } = useSession();
   const isLoggedIn = status === 'authenticated';
   const username = session?.user?.name ?? '';
@@ -146,6 +146,9 @@ export default function Navbar() {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-3 w-40 bg-[#2c3440] border border-[#455568] rounded-lg shadow-xl overflow-hidden z-50">
                     <Link href="/profile" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-xs font-bold text-white hover:bg-[#40bcf4] hover:text-black">Profile</Link>
+                    <Link href="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-xs font-bold text-white hover:bg-[#40bcf4] hover:text-black">Diary</Link>
+                    <Link href="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-xs font-bold text-white hover:bg-[#40bcf4] hover:text-black">Reviews</Link>
+                    <Link href="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-xs font-bold text-white hover:bg-[#40bcf4] hover:text-black">Likes</Link>
                     <Link href="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-xs font-bold text-white hover:bg-[#40bcf4] hover:text-black">Settings</Link>
                     <div className="h-px bg-[#455568]" />
                     <button onClick={handleLogout} className="w-full text-left px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500 hover:text-white">Sign Out</button>

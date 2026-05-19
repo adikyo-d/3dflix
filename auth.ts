@@ -29,7 +29,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!isValid) return null;
 
-        // Objek ini akan disimpan di dalam JWT token
         return {
           id: String(user.id),
           name: user.username,
@@ -41,7 +40,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async jwt({ token, user }) {
-      // Saat pertama login, simpan username ke token
       if (user) {
         token.id = user.id;
         token.name = user.name;
