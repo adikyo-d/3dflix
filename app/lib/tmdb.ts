@@ -100,7 +100,7 @@ export async function discoverMovies(
   else params.set("sort_by", "popularity.desc");
 
   if (filters.with_genres) params.set("with_genres", filters.with_genres);
-  if (filters.year) params.set("primary_release_year", String(filters.year));
+  if (filters.year) params.set("primary_release_year", String(filters.year));``
 
   const res = await fetch(`${TMDB_BASE_URL}/discover/movie?${params}`, {
     next: { revalidate: 3600 },
