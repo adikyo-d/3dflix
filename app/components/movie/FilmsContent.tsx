@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import type { Genre, TMDBMovie } from "@/app/lib/tmdb";
+import type { Genre } from "@/app/lib/tmdb";
 
 const TMDB_IMG = "https://image.tmdb.org/t/p";
 
@@ -35,9 +35,27 @@ const FALLBACK_COLORS = [
   "from-cyan-900 to-green-800",
 ];
 
+interface LocalMovie {
+  id: number;
+  tmdb_id: number;
+  title: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  release_date: string;
+  popularity: number;
+  genre_ids: number[];
+  like_count: number;
+  review_count: number;
+  avg_rating: number | null;
+  watch_count: number;
+}
+
 interface FilmsContentProps {
   genres: Genre[];
-  initialMovies: TMDBMovie[];
+  initialMovies: LocalMovie[];
   initialTotalPages: number;
   initialPage: number;
   initialQuery: string;
@@ -59,9 +77,8 @@ export default function FilmsContent({
   initialMood,
 }: FilmsContentProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const [movies, setMovies] = useState<TMDBMovie[]>(initialMovies);
+  const [movies, setMovies] = useState<LocalMovie[]>(initialMovies);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [page, setPage] = useState(initialPage);
   const [query, setQuery] = useState(initialQuery);
@@ -97,41 +114,32 @@ export default function FilmsContent({
     async (overrides: Record<string, string | number> = {}) => {
       setLoading(true);
       const vals = { q: query, sort, genre, year, mood, page, ...overrides };
-      const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
       try {
-        let url: string;
-        if (vals.q) {
-          const params = new URLSearchParams({
-            api_key: apiKey!,
-            language: "id-ID",
-            query: String(vals.q),
-            page: String(vals.page || 1),
-            include_adult: "false",
-          });
-          url = `https://api.themoviedb.org/3/search/movie?${params}`;
-        } else {
-          const moodObj = MOODS.find((m) => m.value === vals.mood);
-          const genreVal = moodObj ? moodObj.genres : vals.genre;
-          const params = new URLSearchParams({
-            api_key: apiKey!,
-            language: "id-ID",
-            include_adult: "false",
-            page: String(vals.page || 1),
-            sort_by: String(vals.sort || "popularity.desc"),
-          });
-          if (genreVal) params.set("with_genres", String(genreVal));
-          if (vals.year) params.set("primary_release_year", String(vals.year));
-          if (String(vals.sort) === "vote_average.desc") {
-            params.set("vote_count.gte", "200");
-          }
-          url = `https://api.themoviedb.org/3/discover/movie?${params}`;
-        }
+        const moodObj = MOODS.find((m) => m.value === vals.mood);
+        const genreVal = moodObj ? moodObj.genres : vals.genre;
 
-        const res = await fetch(url);
+        const apiParams = new URLSearchParams({
+          page: String(vals.page || 1),
+          sort: String(vals.sort || "popularity.desc"),
+        });
+
+        if (vals.q) apiParams.set("q", String(vals.q));
+        if (genreVal) apiParams.set("genre", String(genreVal));
+        if (vals.year) apiParams.set("year", String(vals.year));
+
+        const res = await fetch(`/api/movies?${apiParams}`);
         const data = await res.json();
-        setMovies(data.results || []);
-        setTotalPages(Math.min(data.total_pages || 0, 500));
+
+        const results = (data.results || []).map((m: any) => ({
+          ...m,
+          genre_ids: m.genres
+            ? m.genres.map((g: any) => g.tmdb_id)
+            : m.genre_ids || [],
+        }));
+
+        setMovies(results);
+        setTotalPages(data.total_pages || 0);
         setPage(data.page || 1);
       } catch {
         setMovies([]);
@@ -286,7 +294,7 @@ export default function FilmsContent({
             <label className="block text-[#678] text-[11px] font-bold uppercase tracking-widest mb-2">
               Genre
             </label>
-            <select
+            <select aria-label="Select Genre"
               value={genre}
               onChange={(e) => {
                 if (e.target.value) setMood("");
@@ -463,7 +471,7 @@ export default function FilmsContent({
       {/* Pagination */}
       {!loading && totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 mt-10">
-          <button
+          <button type="button" aria-label="Previous Page"
             onClick={() => goToPage(page - 1)}
             disabled={page <= 1}
             className="px-3 py-2 rounded-lg text-xs font-bold bg-[#1c2228] border border-[#2c3440] text-[#9ab] hover:text-white hover:border-[#00e054]/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
@@ -491,7 +499,7 @@ export default function FilmsContent({
             )
           )}
 
-          <button
+          <button aria-label="Next Page"
             onClick={() => goToPage(page + 1)}
             disabled={page >= totalPages}
             className="px-3 py-2 rounded-lg text-xs font-bold bg-[#1c2228] border border-[#2c3440] text-[#9ab] hover:text-white hover:border-[#00e054]/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
@@ -508,7 +516,7 @@ function FilmCard({
   movie,
   genres,
 }: {
-  movie: TMDBMovie;
+  movie: LocalMovie;
   genres: Genre[];
 }) {
   const [imgError, setImgError] = useState(false);
@@ -566,7 +574,35 @@ function FilmCard({
           </div>
         )}
 
+        {/* Stats badges */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1">
+          {movie.like_count > 0 && (
+            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold backdrop-blur-sm bg-black/70 text-rose-400 border border-rose-500/30">
+              <i className="fa-solid fa-heart text-[8px]" />
+              {movie.like_count}
+            </div>
+          )}
+          {movie.watch_count > 0 && (
+            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold backdrop-blur-sm bg-black/70 text-[#00e054] border border-[#00e054]/30">
+              <i className="fa-solid fa-eye text-[8px]" />
+              {movie.watch_count}
+            </div>
+          )}
+        </div>
+
         <div className="absolute inset-0 flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Review count on hover */}
+          {movie.review_count > 0 && (
+            <p className="text-[10px] text-[#9ab] font-medium leading-tight mb-1">
+              <i className="fa-solid fa-comment text-[8px] mr-1" />
+              {movie.review_count} review
+              {movie.avg_rating && (
+                <span className="text-[#00e054] ml-1">
+                  ({movie.avg_rating.toFixed(1)})
+                </span>
+              )}
+            </p>
+          )}
           <div className="flex flex-wrap gap-1">
             {movieGenres.map((g) => (
               <span

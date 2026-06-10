@@ -10,6 +10,8 @@ const NAV_LINKS = [
   { label: 'Films', href: '/films', icon: 'fa-film' },
   { label: 'Lists', href: '/lists', icon: 'fa-table-cells' },
   { label: 'Members', href: '/members', icon: 'fa-users' },
+ 
+  
 ];
 
 const SECTION_LINKS = [
@@ -124,7 +126,7 @@ export default function Navbar() {
               onChange={(e) => setSearchVal(e.target.value)}
               placeholder="Cari film..."
               className="bg-[#1c2228] border border-[#2c3440] text-[#9ab] text-sm rounded-full pl-8 pr-4 py-1.5 w-[160px] focus:w-[220px] focus:outline-none focus:border-[#00e054] focus:text-white transition-all duration-300"
-            />
+              />
           </form>
 
           {/* Menu Akun Desktop */}
@@ -159,6 +161,7 @@ export default function Navbar() {
               <>
                 <Link href="/login" className="text-xs font-bold uppercase tracking-wider text-[#9ab] hover:text-white transition-colors">Sign In</Link>
                 <Link href="/register" className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide bg-[#00e054] text-black hover:bg-[#00c04b] hover:-translate-y-px hover:shadow-[0_0_16px_rgba(0,224,84,0.4)] transition-all">Sign Up</Link>
+              
               </>
             )}
           </div>

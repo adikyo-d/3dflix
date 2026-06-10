@@ -28,7 +28,7 @@ export default function LoginPage() {
       setError("Username atau password salah!");
     } else {
       router.push("/");
-      router.refresh(); // Refresh supaya Navbar langsung update session
+      router.refresh();
     }
   };
 
