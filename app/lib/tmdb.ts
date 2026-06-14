@@ -89,6 +89,7 @@ export async function discoverMovies(
   filters: DiscoverFilters = {}
 ): Promise<TMDBResponse> {
   const apiKey = getApiKey();
+
   const params = new URLSearchParams({
     api_key: apiKey!,
     language: "id-ID",
@@ -96,17 +97,36 @@ export async function discoverMovies(
     page: String(filters.page || 1),
   });
 
-  if (filters.sort_by) params.set("sort_by", filters.sort_by);
-  else params.set("sort_by", "popularity.desc");
+  if (filters.sort_by) {
+    params.set("sort_by", filters.sort_by);
+  } else {
+    params.set("sort_by", "popularity.desc");
+  }
 
-  if (filters.with_genres) params.set("with_genres", filters.with_genres);
-  if (filters.year) params.set("primary_release_year", String(filters.year));``
+  if (filters.with_genres) {
+    params.set("with_genres", filters.with_genres);
+  }
 
-  const res = await fetch(`${TMDB_BASE_URL}/discover/movie?${params}`, {
-    next: { revalidate: 3600 },
-  });
+  if (filters.year) {
+    params.set("primary_release_year", String(filters.year));
+  }
 
-  if (!res.ok) return { results: [], total_pages: 0, total_results: 0, page: 1 };
+  const res = await fetch(
+    `${TMDB_BASE_URL}/discover/movie?${params}`,
+    {
+      next: { revalidate: 3600 },
+    }
+  );
+
+  if (!res.ok) {
+    return {
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+      page: 1,
+    };
+  }
+
   return res.json();
 }
 
@@ -130,3 +150,84 @@ export async function searchMovies(
   if (!res.ok) return { results: [], total_pages: 0, total_results: 0, page: 1 };
   return res.json();
 }
+
+export async function getMovieDetail(id: string) {
+  try {
+    const apiKey = getApiKey();
+
+    const res = await fetch(
+      `${TMDB_BASE_URL}/movie/${id}?api_key=${apiKey}&language=id-ID`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Gagal mengambil detail film");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("TMDB ERROR:", error);
+
+    return {
+      id: 0,
+      title: "Movie Not Found",
+      overview: "Data gagal dimuat",
+      poster_path: null,
+      backdrop_path: null,
+      vote_average: 0,
+      release_date: "",
+    };
+  }
+}
+
+export async function getMovieCredits(id: string) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+
+  const res = await fetch(
+    `${TMDB_BASE_URL}/movie/${id}/credits?api_key=${apiKey}&language=id-ID`,
+  );
+
+  if (!res.ok) {
+    throw new Error("Gagal mengambil data cast");
+  }
+
+  return res.json();
+}
+
+export async function getMovieReviews(id: string) {
+  const apiKey = getApiKey();
+
+  const res = await fetch(
+    `${TMDB_BASE_URL}/movie/${id}/reviews?api_key=${apiKey}&language=en-US`,
+    {
+      next: { revalidate: 3600 },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Gagal mengambil reviews");
+  }
+
+  return res.json();
+}
+
+export async function getSimilarMovies(id: string) {
+  const apiKey = getApiKey();
+
+  const res = await fetch(
+    `${TMDB_BASE_URL}/movie/${id}/similar?api_key=${apiKey}&language=id-ID`,
+    {
+      next: { revalidate: 3600 },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Gagal mengambil similar movies");
+  }
+
+  return res.json();
+}
+
+console.log("TMDB KEY:", process.env.NEXT_PUBLIC_TMDB_API_KEY);
