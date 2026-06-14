@@ -7,7 +7,6 @@ interface SimilarMoviesProps {
 export default function SimilarMovies({
   movies,
 }: SimilarMoviesProps) {
-
   if (!movies?.length) {
     return null;
   }

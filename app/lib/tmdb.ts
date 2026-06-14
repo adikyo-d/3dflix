@@ -229,5 +229,4 @@ export async function getSimilarMovies(id: string) {
 
   return res.json();
 }
-
 console.log("TMDB KEY:", process.env.NEXT_PUBLIC_TMDB_API_KEY);

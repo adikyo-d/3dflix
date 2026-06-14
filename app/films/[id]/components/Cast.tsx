@@ -3,11 +3,10 @@ interface CastProps {
 }
 
 export default function Cast({ cast }: CastProps) {
-
   if (!cast?.length) {
     return null;
   }
-  
+
   return (
     <section className="max-w-7xl mx-auto px-10 mt-16">
       <h2 className="text-2xl font-bold mb-6">

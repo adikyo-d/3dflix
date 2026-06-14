@@ -5,7 +5,6 @@ interface ReviewsProps {
 export default function Reviews({
   reviews,
 }: ReviewsProps) {
-
   if (!reviews?.length) {
     return null;
   }

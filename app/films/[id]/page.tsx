@@ -16,7 +16,6 @@ export default async function FilmDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   const [movie, credits, reviews, similarMovies] = await Promise.all([
     getMovieDetail(id),
     getMovieCredits(id),

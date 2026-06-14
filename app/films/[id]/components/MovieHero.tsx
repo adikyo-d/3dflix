@@ -16,6 +16,7 @@ export default function MovieHero({
 }: {
   movie: any;
 }) {
+  
   return (
     <>
       {/* Backdrop */}
