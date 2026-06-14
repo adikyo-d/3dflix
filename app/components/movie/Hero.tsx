@@ -1,7 +1,7 @@
-"use client"; // BARIS INI WAJIB ADA DI PALING ATAS
+"use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link'; // Menggunakan Link bawaan Next.js
+import Link from 'next/link'; 
 
 // Utility untuk memformat angka stat
 const formatViews = (num: number) => {
