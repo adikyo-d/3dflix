@@ -7,6 +7,7 @@ export default function MovieDetails({
 }: MovieDetailsProps) {
   console.log(movie);
   console.log(movie.overview);
+  
   return (
     <section className="max-w-7xl mx-auto px-10 mt-16">
       <h2 className="text-2xl font-bold mb-4">
