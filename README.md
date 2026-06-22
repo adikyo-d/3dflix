@@ -12,7 +12,6 @@
 | LALU ADITYA RAMADHANI | F1D02410063 | **Fullstack Developer** | Merancang dan mengimplementasikan seluruh antarmuka pengguna (UI/UX) yang responsif dan interaktif, membangun API Routes, sistem autentikasi, dan integrasi database. |
 | DESWITA SALSABILA | F1D02410004 | **Frontend Developer & UI/UX Designer**| Mendesain dan mengembangkan tampilan antarmuka aplikasi menggunakan Tailwind CSS, membuat halaman yang responsif dan interaktif, serta membantu integrasi frontend dengan API dan sistem autentikasi. |
 | ROSIDA ASRI ARDIANI | F1D02410142 |  **Backend Developer** | Membantu pengelolaan database MySQL, watchlist, dan autentikasi pengguna, serta memastikan data tersimpan dengan baik. |
- 8d>>>>>>>7f3853492e14afa5155159e9e3dff2072aea5f
 
 ---
 
@@ -117,35 +116,50 @@ Menyimpan cache data film dari TMDB.
 
 | Kolom | Tipe Data | Constraint | Deskripsi |
 | :--- | :--- | :--- | :--- |
-| `id` | INT | PRIMARY KEY | ID Film (mengikuti ID dari TMDB) |
-| `title` | VARCHAR(255) | NOT NULL | Judul resmi film |
-| `release_year` | INT | | Tahun rilis film |
-| `poster_url` | TEXT | | URL gambar poster film |
-| `description` | TEXT | | Sinopsis singkat film |
+| id | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik film pada database lokal |
+| tmdb_id | INT | UNIQUE, NOT NULL | ID film dari TMDB |
+| title | VARCHAR(500) | NOT NULL | Judul film |
+| overview | TEXT | NULL | Sinopsis atau ringkasan cerita film |
+| poster_path | VARCHAR(255) | NULL | Path poster film dari TMDB |
+| backdrop_path | VARCHAR(255) | NULL | Path gambar latar film dari TMDB |
+| vote_average | DECIMAL(3,1) | DEFAULT 0.0 | Rating rata-rata film dari TMDB |
+| vote_count | INT | DEFAULT 0 | Jumlah pengguna yang memberikan rating |
+| release_date | DATE | NULL | Tanggal rilis film |
+| popularity | DECIMAL(10,3) | DEFAULT 0.000 | Nilai popularitas film dari TMDB |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu data film disimpan ke database |
 
 #### 3. Tabel `reviews`
 Menyimpan log dan ulasan pengguna.
 
 | Kolom | Tipe Data | Constraint | Deskripsi |
 | :--- | :--- | :--- | :--- |
-| `id` | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik ulasan |
-| `user_id` | INT | FOREIGN KEY → `users.id` | Penulis ulasan |
-| `movie_id` | INT | FOREIGN KEY → `movies.id` | Film yang diulas |
-| `rating` | DECIMAL(2,1) | CHECK (0.5–5.0) | Rating bintang |
-| `review_text` | TEXT | | Isi teks ulasan |
-| `has_spoiler` | BOOLEAN | DEFAULT FALSE | Indikator spoiler |
-| `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu ulasan dibuat |
+| id | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik review |
+| user_id | INT | FOREIGN KEY → users.id | Pengguna yang menulis review |
+| movie_id | INT | FOREIGN KEY → movies.id | Film yang direview |
+| rating | INT | NOT NULL | Nilai rating yang diberikan pengguna |
+| content | TEXT | NULL | Isi review atau komentar pengguna |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu review dibuat |
 
 #### 4. Tabel `watchlists`
 Menyimpan daftar film yang ingin ditonton.
 
 | Kolom | Tipe Data | Constraint | Deskripsi |
 | :--- | :--- | :--- | :--- |
-| `id` | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik watchlist |
-| `user_id` | INT | FOREIGN KEY → `users.id` | Pemilik watchlist |
-| `movie_id` | INT | FOREIGN KEY → `movies.id` | Film yang disimpan |
-| `added_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu ditambahkan |
+| id | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik watchlist |
+| user_id | INT | FOREIGN KEY → users.id | Pemilik watchlist |
+| movie_id | INT | FOREIGN KEY → movies.id | Film yang disimpan ke watchlist |
+| watched | BOOLEAN | DEFAULT FALSE | Status film sudah ditonton atau belum |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu film ditambahkan ke watchlist |
 
+### Tabel `likes`
+menyimpan data film yang disukai oleh user
+
+| Kolom | Tipe Data | Constraint | Deskripsi |
+| :--- | :--- | :--- | :--- |
+| id | INT | PRIMARY KEY, AUTO_INCREMENT | ID unik data like |
+| user_id | INT | FOREIGN KEY → users.id | Pengguna yang memberikan like |
+| movie_id | INT | FOREIGN KEY → movies.id | Film yang disukai |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu like diberikan |
 ---
 
 ## Struktur Proyek
