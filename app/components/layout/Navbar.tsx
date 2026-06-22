@@ -61,8 +61,10 @@ export default function Navbar() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (searchVal.trim()) {
       router.push(`/films?q=${encodeURIComponent(searchVal.trim())}`);
+      router.refresh();
       setSearchVal('');
       setIsOpen(false);
     } else {
@@ -115,18 +117,23 @@ export default function Navbar() {
         </div>
 
         {/* === BAGIAN KANAN: SEARCH & AKUN === */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 relative z-50">
           
           {/* Form Search */}
-          <form onSubmit={handleSearch} className="relative hidden md:block group">
+          <form onSubmit={handleSearch}  className="relative hidden md:block group z-50">
             <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#9ab] group-focus-within:text-white" />
             <input
               type="text"
+              style={{ pointerEvents: "auto" }}
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
               placeholder="Cari film..."
               className="bg-[#1c2228] border border-[#2c3440] text-[#9ab] text-sm rounded-full pl-8 pr-4 py-1.5 w-[160px] focus:w-[220px] focus:outline-none focus:border-[#00e054] focus:text-white transition-all duration-300"
               />
+
+            <button type="submit" hidden>
+              Search
+            </button>
           </form>
 
           {/* Menu Akun Desktop */}

@@ -21,12 +21,16 @@ export async function GET(request: NextRequest) {
     }
 
     if (genre) {
-      conditions.push(
-        "m.id IN (SELECT movie_id FROM movie_genres mg JOIN genres g ON mg.genre_id = g.id WHERE g.tmdb_id = ?)"
-      );
-      params.push(Number(genre));
-    }
+      const genreIds = genre.split(",");
+      const placeholders = genreIds.map(() => "?").join(",");
 
+      conditions.push(`m.id IN (
+      SELECT movie_id FROM movie_genres mg JOIN genres g ON mg.genre_id = g.id WHERE g.tmdb_id IN (${placeholders})
+    )
+  `);
+      params.push(...genreIds.map(Number));
+    }
+    
     if (year) {
       conditions.push("YEAR(m.release_date) = ?");
       params.push(Number(year));
