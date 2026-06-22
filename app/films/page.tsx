@@ -18,6 +18,7 @@ export default async function FilmsPage({ searchParams }: FilmsPageProps) {
   const limit = 20;
   const offset = (page - 1) * limit;
   const query = params.q || "";
+  console.log("SEARCH QUERY =", query);
   const genre = params.genre || "";
   const year = params.year || "";
   const sort = params.sort || "popularity.desc";

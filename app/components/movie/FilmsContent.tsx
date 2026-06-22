@@ -76,8 +76,10 @@ export default function FilmsContent({
   initialYear,
   initialMood,
 }: FilmsContentProps) {
-  const router = useRouter();
+  console.log("initialQuery:", initialQuery);
+  console.log("movies:", initialMovies.length)
 
+  const router = useRouter();n
   const [movies, setMovies] = useState<LocalMovie[]>(initialMovies);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [page, setPage] = useState(initialPage);
