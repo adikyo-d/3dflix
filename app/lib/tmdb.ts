@@ -155,23 +155,41 @@ export async function getMovieDetail(id: string) {
   try {
     const apiKey = getApiKey();
 
-    const res = await fetch(
+    // Ambil versi Indonesia
+    const indoRes = await fetch(
       `${TMDB_BASE_URL}/movie/${id}?api_key=${apiKey}&language=id-ID`,
       {
         next: { revalidate: 3600 },
       }
     );
 
-    if (!res.ok) {
-      console.log("STATUS:", res.status);
-      console.log("URL:", res.url);
-      const text = await res.text();
-      console.log("RESPONSE:", text);
-
+    if (!indoRes.ok) {
       throw new Error("Gagal mengambil detail film");
     }
 
-    return await res.json();
+    const indoData = await indoRes.json();
+
+    // Kalau synopsis Indonesia ada, langsung pakai
+    if (indoData.overview?.trim()) {
+      return indoData;
+    }
+
+    // Kalau kosong, ambil English
+    const engRes = await fetch(
+      `${TMDB_BASE_URL}/movie/${id}?api_key=${apiKey}&language=en-US`,
+      {
+        next: { revalidate: 3600 },
+      }
+    );
+
+    const engData = await engRes.json();
+
+    return {
+      ...indoData,
+      overview: engData.overview,
+      tagline: engData.tagline,
+    };
+
   } catch (error) {
     console.error("TMDB ERROR:", error);
 
