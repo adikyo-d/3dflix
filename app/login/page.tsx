@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -63,6 +64,7 @@ export default function LoginPage() {
           {loading ? "MEMPROSES..." : "MASUK"}
         </button>
       </form>
+      
     </div>
   );
 }

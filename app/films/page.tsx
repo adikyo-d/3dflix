@@ -8,12 +8,10 @@ interface FilmsPageProps {
 export default async function FilmsPage({ searchParams }: FilmsPageProps) {
   const params = await searchParams;
 
-  // Fetch genres dari DB
   const [genres]: any = await pool.execute(
     "SELECT id, tmdb_id, name FROM genres ORDER BY name"
   );
 
-  // Build query untuk initial data
   const page = Math.max(1, Number(params.page) || 1);
   const limit = 20;
   const offset = (page - 1) * limit;

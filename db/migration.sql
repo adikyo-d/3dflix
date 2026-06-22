@@ -1,7 +1,4 @@
--- 3dflix Database Migration
--- Jalankan di phpMyAdmin: pilih DB 3dflix > tab SQL > paste semua > Go
 
--- Tambah kolom role di tabel users (abaikan error jika sudah ada)
 ALTER TABLE users
   ADD COLUMN role ENUM('member', 'admin') NOT NULL DEFAULT 'member';
 
