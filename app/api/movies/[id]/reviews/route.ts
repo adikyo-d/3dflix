@@ -53,13 +53,6 @@ export async function POST(
         { status: 400 }
       );
     }
-    console.log({
-     userId: session.user.id,
-     movieId: id,
-     rating,
-     content,
-    });
-
     await pool.execute(
       `INSERT INTO reviews (user_id, movie_id, rating, review_text)
        VALUES (?, ?, ?, ?)
