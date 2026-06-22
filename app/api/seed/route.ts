@@ -76,7 +76,7 @@ export async function GET() {
           "SELECT id FROM movies WHERE tmdb_id = ?",
           [movie.id]
         );
-        const movieId = movieRows[0].id;
+        const movieDbId = movieRows[0]?.id;
 
         // Insert movie_genres
         const genreIds: number[] = movie.genre_ids || [];
@@ -85,7 +85,7 @@ export async function GET() {
           if (localGenreId) {
             await pool.execute(
               `INSERT IGNORE INTO movie_genres (movie_id, genre_id) VALUES (?, ?)`,
-              [movieId, localGenreId]
+              [movieDbId, localGenreId]
             );
           }
         }

@@ -57,14 +57,15 @@ export async function POST(
      userId: session.user.id,
      movieId: id,
      rating,
-     content,
+     content: review_text || null,
+     createdAt: new Date(),
     });
 
     await pool.execute(
-      `INSERT INTO reviews (user_id, movie_id, rating, review_text)
-       VALUES (?, ?, ?, ?)
-       ON DUPLICATE KEY UPDATE rating = VALUES(rating), review_text = VALUES(review_text)`,
-      [session.user.id, id, rating, review_text || null]
+      `INSERT INTO reviews (user_id, movie_id, rating, content, created_at)
+       VALUES (?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE rating = VALUES(rating), content = VALUES(content)`,
+      [session.user.id, id, rating, review_text || null, new Date()]
     );
 
     return NextResponse.json({ success: true });

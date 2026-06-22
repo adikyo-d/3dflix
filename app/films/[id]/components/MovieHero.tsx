@@ -5,6 +5,7 @@ import ReviewModal from "./ReviewModal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 interface Movie {
+  id: number;
   title: string;
   poster_path: string | null;
   backdrop_path: string | null;
@@ -181,6 +182,7 @@ export default function MovieHero({
             />
             {showReviewModal && (
               <ReviewModal
+                movieId={movie.id}
                 onClose={() => setShowReviewModal(false)}
               />
             )}
