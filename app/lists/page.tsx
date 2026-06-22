@@ -22,8 +22,8 @@ export default async function ListPage() {
     m.tmdb_id
   FROM watchlists w
   JOIN movies m
-    ON w.movie_id = m.tmdb_id
-  WHERE w.user_id = ?
+    ON w.movie_id = m.id
+  WHERE w.user_id = ? AND w.watched = false
   ORDER BY w.created_at DESC
   `,
   [session.user.id]

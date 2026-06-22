@@ -2,6 +2,15 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "@/app/lib/db";
+import type { RowDataPacket } from "mysql2";
+
+interface AuthUserRow extends RowDataPacket {
+  id: number;
+  username: string;
+  email: string | null;
+  password: string;
+  role: string;
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -14,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) return null;
 
-        const [rows]: any = await pool.execute(
+        const [rows] = await pool.execute<AuthUserRow[]>(
           "SELECT * FROM users WHERE username = ?",
           [credentials.username as string],
         );
@@ -40,12 +49,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.email = user.email;
         token.role = user.role;
       }
+
+      if (trigger === "update" && session) {
+        if (typeof session.name === "string") {
+          token.name = session.name;
+        }
+        if (typeof session.email === "string") {
+          token.email = session.email;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -53,6 +73,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;
+        session.user.email = token.email as string;
         session.user.role = token.role as string;
       }
       return session;

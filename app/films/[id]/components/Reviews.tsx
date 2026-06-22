@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 
 interface ReviewsProps {
   movieId: number;
@@ -17,8 +16,6 @@ interface Review {
 
 export default function Reviews({ movieId }: ReviewsProps) {
   const [reviewList, setReviewList] = useState<Review[]>([]);
-  const { data: session } = useSession();
-
   const fetchReviews = () => {
     fetch(`/api/movies/${movieId}/reviews`)
       .then((r) => r.json())

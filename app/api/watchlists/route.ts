@@ -1,19 +1,24 @@
 import { NextResponse } from "next/server";
 import pool from "@/app/lib/db";
+import { auth } from "@/auth";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Harus login dulu" }, { status: 401 });
+    }
 
-    const { user_id, movie_id } = body;
+    const { movie_id, watched = false } = await req.json();
 
     await pool.execute(
       `
       INSERT INTO watchlists
-      (user_id, movie_id)
-      VALUES (?, ?)
+      (user_id, movie_id, watched)
+      VALUES (?, ?, ?)
+      ON DUPLICATE KEY UPDATE watched = VALUES(watched)
       `,
-      [user_id, movie_id]
+      [session.user.id, movie_id, Boolean(watched)]
     );
 
     return NextResponse.json({
@@ -24,7 +29,10 @@ export async function POST(req: Request) {
     console.error(error);
 
     return NextResponse.json(
-      { success: false },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Gagal menambahkan watchlist",
+      },
       { status: 500 }
     );
   }

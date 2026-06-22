@@ -27,19 +27,34 @@ export default function MovieHero({
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [inWatchlist, setInWatchlist] = useState(false);
+  const [watched, setWatched] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
+  // Ambil status like berdasarkan ID film saat komponen dimuat
   useEffect(() => {
+    if (!movieId) return;
+
     fetch(`/api/movies/${movieId}/like`)
       .then((r) => r.json())
       .then((data) => {
-        setLiked(data.liked);
-        setLikeCount(data.like_count);
+        setLiked(Boolean(data.liked));
+        setLikeCount(Number(data.like_count) || 0);
       })
-      .catch(() => {});
+      .catch((err) => console.error("Gagal memuat data like:", err));
+
+    fetch(`/api/movies/${movieId}/watchlist`)
+      .then((r) => r.json())
+      .then((data) => {
+        setInWatchlist(Boolean(data.in_watchlist));
+        setWatched(Boolean(data.watched));
+      })
+      .catch((err) => console.error("Gagal memuat status film:", err));
   }, [movieId]);
 
+  // Handler untuk menyukai / membatalkan suka pada film
   const handleLike = async () => {
     if (!session) {
       router.push("/login");
@@ -51,36 +66,44 @@ export default function MovieHero({
         method: liked ? "DELETE" : "POST",
       });
       const data = await res.json();
-      setLiked(data.liked);
-      setLikeCount(data.like_count);
+      if (!res.ok) throw new Error(data.error || "Gagal memperbarui like");
+      setLiked(Boolean(data.liked));
+      setLikeCount(Number(data.like_count) || 0);
     } catch (error) {
-      console.error(error);
+      console.error("Error handle like:", error);
     }
   };
 
-  const handleWatchlist = async () => {
-    if (!session) {
+  // Handler untuk menyimpan film ke daftar Watchlist
+  const updateMovieStatus = async (target: "watchlist" | "watched") => {
+    if (!session || !session.user) {
       router.push("/login");
       return;
     }
 
     try {
-      const res = await fetch("/api/watchlists", {
-        method: "POST",
+      setActionLoading(true);
+      const shouldRemove =
+        (target === "watchlist" && inWatchlist && !watched) ||
+        (target === "watched" && watched);
+
+      const res = await fetch(`/api/movies/${movieId}/watchlist`, {
+        method: shouldRemove ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: session.user.id,
-          movie_id: movie.id,
-        }),
+        body: shouldRemove
+          ? undefined
+          : JSON.stringify({ watched: target === "watched" }),
       });
 
       const data = await res.json();
-      if (data.success) {
-        alert("Film berhasil ditambahkan ke Watchlists");
-      }
+      if (!res.ok) throw new Error(data.error || "Gagal memperbarui status film");
+      setInWatchlist(Boolean(data.in_watchlist));
+      setWatched(Boolean(data.watched));
     } catch (error) {
-      console.error(error);
-      alert("Gagal menambahkan watchlists");
+      console.error("Error update movie status:", error);
+      alert(error instanceof Error ? error.message : "Gagal memperbarui status film");
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -154,11 +177,29 @@ export default function MovieHero({
               </button>
 
               <button
-                onClick={handleWatchlist}
-                className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition"
+                onClick={() => updateMovieStatus("watchlist")}
+                disabled={actionLoading}
+                className={`px-8 py-4 rounded-xl border transition disabled:opacity-50 ${
+                  inWatchlist && !watched
+                    ? "border-[#00e054] bg-[#00e054] text-black"
+                    : "border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black"
+                }`}
               >
                 <i className="fa-solid fa-bookmark mr-2" />
-                ADD TO WATCHLIST
+                {inWatchlist && !watched ? "IN WATCHLIST" : "ADD TO WATCHLIST"}
+              </button>
+
+              <button
+                onClick={() => updateMovieStatus("watched")}
+                disabled={actionLoading}
+                className={`px-8 py-4 rounded-xl border transition disabled:opacity-50 ${
+                  watched
+                    ? "border-sky-400 bg-sky-400 text-black"
+                    : "border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-black"
+                }`}
+              >
+                <i className="fa-solid fa-eye mr-2" />
+                {watched ? "WATCHED" : "MARK AS WATCHED"}
               </button>
             </div>
 
@@ -202,19 +243,21 @@ export default function MovieHero({
           </div>
 
           {/* RIGHT SIDE - POSTER */}
-          <div className="flex justify-center lg:justify-end">
-            <img
-              src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full max-w-[380px] rounded-3xl object-cover border border-[#00e054]/20"
-              style={{
-                boxShadow:
-                  "0 0 40px rgba(0,224,84,0.15), 0 20px 60px rgba(0,0,0,0.6)",
-              }}
-            />
+          <div className="flex flex-col items-center lg:items-end justify-start">
+            {movie.poster_path && (
+              <img
+                src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
+                alt={movie.title}
+                className="w-full max-w-[380px] rounded-3xl object-cover border border-[#00e054]/20 mb-4"
+                style={{
+                  boxShadow:
+                    "0 0 40px rgba(0,224,84,0.15), 0 20px 60px rgba(0,0,0,0.6)",
+                }}
+              />
+            )}
             {showReviewModal && (
               <ReviewModal
-                movieId={movieid}
+                movieId={movieId}
                 onClose={() => setShowReviewModal(false)}
                 onSuccess={() => {
                   setShowReviewModal(false);

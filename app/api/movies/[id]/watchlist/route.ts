@@ -52,6 +52,14 @@ export async function POST(
   try {
     const { watched } = await request.json();
 
+    const [movieRows]: any = await pool.execute(
+      "SELECT id FROM movies WHERE id = ?",
+      [id]
+    );
+    if (movieRows.length === 0) {
+      return NextResponse.json({ error: "Film tidak ditemukan" }, { status: 404 });
+    }
+
     await pool.execute(
       `INSERT INTO watchlists (user_id, movie_id, watched)
        VALUES (?, ?, ?)
@@ -59,7 +67,11 @@ export async function POST(
       [session.user.id, id, watched ?? false]
     );
 
-    return NextResponse.json({ success: true, in_watchlist: true, watched: !!watched });
+    return NextResponse.json({
+      success: true,
+      in_watchlist: true,
+      watched: Boolean(watched),
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

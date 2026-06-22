@@ -17,14 +17,14 @@ export async function POST(req: Request) {
     }
 
     const {
-      movieId,
+      movie_id,
       rating,
       content,
     } = body;
 
     const [movieRows]: any = await pool.execute(
-      "SELECT id FROM movies WHERE tmdb_id = ?",
-      [movieId]
+      "SELECT id FROM movies WHERE id = ?",
+      [movie_id]
     );
 
     if (movieRows.length === 0) {
@@ -35,6 +35,13 @@ export async function POST(req: Request) {
     }
 
     const movieDbId = movieRows[0].id;
+
+    if (!rating || rating < 1 || rating > 5 || !content?.trim()) {
+      return NextResponse.json(
+        { message: "Rating dan isi review wajib diisi" },
+        { status: 400 }
+      );
+    }
 
     await pool.execute(
       `
@@ -47,12 +54,16 @@ export async function POST(req: Request) {
         created_at
       )
       VALUES (?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        rating = VALUES(rating),
+        content = VALUES(content),
+        created_at = VALUES(created_at)
       `,
       [
         Number(session.user.id),
         movieDbId,
         rating,
-        content,
+        content.trim(),
         new Date(),
       ]
     );

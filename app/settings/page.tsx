@@ -1,58 +1,47 @@
 import { auth } from "@/auth";
+import pool from "@/app/lib/db";
+import { redirect } from "next/navigation";
+import ProfileSettingsForm from "./ProfileSettingsForm";
+import type { RowDataPacket } from "mysql2";
+
+interface SettingsUserRow extends RowDataPacket {
+  username: string;
+  email: string;
+}
 
 export default async function SettingsPage() {
   const session = await auth();
 
-  if (!session?.user) {
-    return (
-      <main className="min-h-screen bg-black text-white p-10">
-        <h1 className="text-4xl font-bold">Settings</h1>
-        <p className="mt-5 text-gray-400">
-          Silakan login terlebih dahulu.
-        </p>
-      </main>
-    );
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const [rows] = await pool.execute<SettingsUserRow[]>(
+    "SELECT username, email FROM users WHERE id = ? LIMIT 1",
+    [session.user.id]
+  );
+  const user = rows[0];
+
+  if (!user) {
+    redirect("/login");
   }
 
   return (
     <main className="min-h-screen bg-black text-white p-10">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-2xl mx-auto">
 
         <h1 className="text-4xl font-bold mb-6">
-          Settings
+          Profile Settings
         </h1>
 
-        <div className="bg-zinc-900 rounded-xl p-6 space-y-4">
+        <p className="mb-8 text-gray-400">
+          Perbarui identitas akun yang tampil pada profil dan ulasanmu.
+        </p>
 
-          <div>
-            <p className="text-gray-400 text-sm">
-              Username
-            </p>
-            <p className="text-xl font-semibold">
-              {session.user.name || "-"}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-gray-400 text-sm">
-              Email
-            </p>
-            <p className="text-xl font-semibold">
-              {session.user.email || "-"}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-gray-400 text-sm">
-              Account Status
-            </p>
-            <p className="text-green-400 font-semibold">
-              Logged In
-            </p>
-          </div>
-
-        </div>
-
+        <ProfileSettingsForm
+          initialUsername={user.username}
+          initialEmail={user.email}
+        />
       </div>
     </main>
   );

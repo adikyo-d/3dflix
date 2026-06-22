@@ -16,10 +16,12 @@ export default async function ReviewsPage() {
 
   try {
     const [rows]: any = await pool.execute(
-      `SELECT *
-       FROM reviews
-       WHERE user_id = ?
-       ORDER BY created_at DESC`,
+      `SELECT r.id, r.rating, r.content AS review_text, r.created_at,
+              m.title AS movie_title, m.tmdb_id
+       FROM reviews r
+       JOIN movies m ON r.movie_id = m.id
+       WHERE r.user_id = ?
+       ORDER BY r.created_at DESC`,
       [session.user.id]
     );
 
@@ -46,6 +48,13 @@ export default async function ReviewsPage() {
                 key={review.id}
                 className="bg-zinc-900 p-6 rounded-xl"
               >
+                <a
+                  href={`/films/${review.tmdb_id}`}
+                  className="text-xl font-bold text-[#00e054] hover:underline"
+                >
+                  {review.movie_title}
+                </a>
+
                 <p className="font-bold">
                   ⭐ {review.rating}/5
                 </p>

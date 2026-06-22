@@ -10,7 +10,7 @@ export async function GET() {
 
   try {
     const [rows]: any = await pool.execute(
-      `SELECT r.id, r.rating, r.review_text, r.created_at,
+      `SELECT r.id, r.rating, r.content AS review_text, r.created_at,
               u.username, m.title as movie_title
        FROM reviews r
        JOIN users u ON r.user_id = u.id

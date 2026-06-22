@@ -69,9 +69,10 @@ CREATE TABLE watchlists (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   movie_id INT NOT NULL,
+  watched BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE KEY unique_watchlist (user_id, movie_id),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (movie_id) REFERENCES movies(tmdb_id)ON DELETE CASCADE
+  FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
