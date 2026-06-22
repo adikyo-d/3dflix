@@ -79,7 +79,7 @@ export default function FilmsContent({
   console.log("initialQuery:", initialQuery);
   console.log("movies:", initialMovies.length)
 
-  const router = useRouter();n
+  const router = useRouter();
   const [movies, setMovies] = useState<LocalMovie[]>(initialMovies);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [page, setPage] = useState(initialPage);
