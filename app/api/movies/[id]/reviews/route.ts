@@ -53,6 +53,7 @@ export async function POST(
         { status: 400 }
       );
     }
+<<<<<<< HEAD
     console.log({
      userId: session.user.id,
      movieId: id,
@@ -61,6 +62,8 @@ export async function POST(
      createdAt: new Date(),
     });
 
+=======
+>>>>>>> c507a3a9dc2e9884d121d2a6aaf469d2d4141bab
     await pool.execute(
       `INSERT INTO reviews (user_id, movie_id, rating, content, created_at)
        VALUES (?, ?, ?, ?, ?)

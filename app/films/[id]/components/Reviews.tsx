@@ -1,95 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 interface ReviewsProps {
-  reviews: any[];
   movieId: number;
 }
 
-export default function Reviews({
-  reviews,
-  movieId,
-}: ReviewsProps) {
-  
-  console.log("movieId =", movieId);
-  console.log({reviews, movieId,});
-  const [reviewList, setReviewList] = useState(reviews);
-  const [name, setName] = useState("");
-  const [rating, setRating] = useState(5);
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
+interface Review {
+  id: number;
+  username: string;
+  rating: number;
+  review_text: string;
+  created_at: string;
+}
+
+export default function Reviews({ movieId }: ReviewsProps) {
+  const [reviewList, setReviewList] = useState<Review[]>([]);
   const { data: session } = useSession();
 
-
-  const handleSubmit = async () => {
-    if (!name || !content) {
-      alert("Lengkapi review terlebih dahulu");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      console.log({
-        user_id: session?.user?.id,
-        movie_id: movieId,
-        rating,
-       content,
-      });
-
-      const res = await  fetch(`/api/reviews/${movieId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: session?.user?.id,
-          movie_id: movieId,
-          rating,
-          content,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        const newReview = {
-          id: Date.now(),
-          user_id: name,
-          rating,
-          content,
-          created_at: new Date().toISOString(),
-        };
-
-        setReviewList([newReview, ...reviewList]);
-
-        setName("");
-        setContent("");
-        setRating(5);
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gagal mengirim review");
-    } finally {
-      setLoading(false);
-    }
+  const fetchReviews = () => {
+    fetch(`/api/movies/${movieId}/reviews`)
+      .then((r) => r.json())
+      .then((data) => setReviewList(data.reviews || []))
+      .catch(() => {});
   };
 
-  return (
-    <section
-      id="reviews"
-      className="max-w-7xl mx-auto px-8 py-20"
-    >
-      <h2 className="text-4xl font-black text-white mb-8">
-        Reviews
-      </h2>
+  useEffect(() => {
+    if (movieId) fetchReviews();
+  }, [movieId]);
 
-      {/* LIST REVIEW */}
+  return (
+    <section id="reviews" className="max-w-7xl mx-auto px-8 py-20">
+      <h2 className="text-4xl font-black text-white mb-8">Reviews</h2>
+
       <div className="grid gap-6">
-        {reviewList?.length > 0 ? (
-          reviewList.map((review: any) => (
+        {reviewList.length > 0 ? (
+          reviewList.map((review) => (
             <div
               key={review.id}
               className="bg-[#14181c] border border-[#00e054]/20 rounded-3xl p-6"
@@ -97,29 +44,24 @@ export default function Reviews({
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <h3 className="text-white font-bold text-lg">
-                    {review.user_id || review.author}
+                    {review.username}
                   </h3>
-
                   <p className="text-gray-500 text-sm">
                     {review.created_at?.slice(0, 10)}
                   </p>
                 </div>
-
-                <div className="text-[#00e054] text-lg">
-                  {"⭐".repeat(review.rating || 5)}
+                <div className="text-yellow-400 text-lg">
+                  {"★".repeat(review.rating)}
                 </div>
               </div>
-
               <p className="text-gray-300 leading-relaxed">
-                {review.content}
+                {review.review_text || "(tanpa teks)"}
               </p>
             </div>
           ))
         ) : (
           <div className="bg-[#14181c] rounded-3xl p-10 text-center">
-            <p className="text-gray-400">
-              No reviews available yet.
-            </p>
+            <p className="text-gray-400">No reviews available yet.</p>
           </div>
         )}
       </div>

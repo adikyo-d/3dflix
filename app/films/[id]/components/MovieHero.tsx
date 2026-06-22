@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReviewModal from "./ReviewModal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 interface Movie {
   id: number;
   title: string;
@@ -18,40 +19,71 @@ interface Movie {
 
 export default function MovieHero({
   movie,
+  movieId,
 }: {
   movie: Movie;
+  movieId: number;
 }) {
   const [showReviewModal, setShowReviewModal] = useState(false);
-  const { data: session } = useSession(); const router = useRouter();
-  const handleWatchlist = async () => {
-  if (!session) {
-    router.push("/login");
-    return;
-  }
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  try {
-    const res = await fetch("/api/watchlists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: session.user.id,
-        movie_id: movie.id,
-      }),
-    });
+  useEffect(() => {
+    fetch(`/api/movies/${movieId}/like`)
+      .then((r) => r.json())
+      .then((data) => {
+        setLiked(data.liked);
+        setLikeCount(data.like_count);
+      })
+      .catch(() => {});
+  }, [movieId]);
 
-    const data = await res.json();
-
-    if (data.success) {
-      alert("✅ Film berhasil ditambahkan ke Watchlists");
+  const handleLike = async () => {
+    if (!session) {
+      router.push("/login");
+      return;
     }
-  } catch (error) {
-    console.error(error);
-    alert("Gagal menambahkan watchlists");
-  }
-};
-  
+
+    try {
+      const res = await fetch(`/api/movies/${movieId}/like`, {
+        method: liked ? "DELETE" : "POST",
+      });
+      const data = await res.json();
+      setLiked(data.liked);
+      setLikeCount(data.like_count);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleWatchlist = async () => {
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/watchlists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: session.user.id,
+          movie_id: movie.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Film berhasil ditambahkan ke Watchlists");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gagal menambahkan watchlists");
+    }
+  };
+
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
       {/* BACKDROP */}
@@ -73,7 +105,6 @@ export default function MovieHero({
       {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-16">
         <div className="grid lg:grid-cols-[1fr_380px] gap-12 items-start">
-          
           {/* LEFT SIDE */}
           <div>
             <div className="mb-4">
@@ -88,7 +119,7 @@ export default function MovieHero({
 
             <div className="flex gap-3 text-gray-300 mb-5">
               <span>{movie.release_date}</span>
-              <span>•</span>
+              <span>&bull;</span>
               <span>{movie.runtime || 0} min</span>
             </div>
 
@@ -97,52 +128,56 @@ export default function MovieHero({
             </p>
 
             <div className="flex gap-4 flex-wrap mb-8">
-              <button 
+              <button
                 onClick={() => {
                   if (!session) {
                     router.push("/login");
-                    return;}
-
-                  setShowReviewModal(true);}}
-
-                className="px-8 py-4 rounded-xl bg-[#00e054] text-black transition-all duration-300 font-bold hover:bg-[#00ff66] hover:scale-105 hover:shadow-[0_0_25px_rgba(0,224,84,0.6)]">
-                ⭐ RATE & REVIEW
+                    return;
+                  }
+                  setShowReviewModal(true);
+                }}
+                className="px-8 py-4 rounded-xl bg-[#00e054] text-black transition-all duration-300 font-bold hover:bg-[#00ff66] hover:scale-105 hover:shadow-[0_0_25px_rgba(0,224,84,0.6)]"
+              >
+                RATE & REVIEW
               </button>
 
-              <button 
+              <button
+                onClick={handleLike}
+                className={`px-8 py-4 rounded-xl border font-bold transition-all duration-300 ${
+                  liked
+                    ? "bg-rose-500 border-rose-500 text-white hover:bg-rose-600"
+                    : "border-rose-400 text-rose-400 hover:bg-rose-500 hover:text-white"
+                }`}
+              >
+                <i className={`fa-${liked ? "solid" : "regular"} fa-heart mr-2`} />
+                {liked ? "LIKED" : "LIKE"} ({likeCount})
+              </button>
+
+              <button
                 onClick={handleWatchlist}
                 className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition"
               >
-                ❤ ADD TO WATCHLIST
+                <i className="fa-solid fa-bookmark mr-2" />
+                ADD TO WATCHLIST
               </button>
             </div>
 
             {/* METRICS + VISUAL */}
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-black/50 backdrop-blur-md border border-[#00e054]/30 rounded-2xl p-6">
-                <h3 className="text-[#00e054] font-bold mb-4">
-                  METRICS
-                </h3>
-
+                <h3 className="text-[#00e054] font-bold mb-4">METRICS</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <div className="text-3xl font-bold text-white">
                       {movie.vote_average?.toFixed(1)}
                     </div>
-
-                    <div className="text-sm text-gray-500">
-                      Rating
-                    </div>
+                    <div className="text-sm text-gray-500">Rating</div>
                   </div>
-
                   <div>
                     <div className="text-3xl font-bold text-white">
                       {movie.vote_count}
                     </div>
-
-                    <div className="text-sm text-gray-500">
-                      Votes
-                    </div>
+                    <div className="text-sm text-gray-500">Votes</div>
                   </div>
                 </div>
               </div>
@@ -151,16 +186,13 @@ export default function MovieHero({
                 <h3 className="text-[#00e054] font-bold mb-4">
                   VISUAL EXPERIENCE
                 </h3>
-
                 <div className="flex flex-wrap gap-2">
                   <span className="px-3 py-1 rounded border border-[#00e054]/30">
                     4K
                   </span>
-
                   <span className="px-3 py-1 rounded border border-[#00e054]/30">
                     HDR
                   </span>
-
                   <span className="px-3 py-1 rounded border border-[#00e054]/30">
                     ATMOS
                   </span>
@@ -182,8 +214,16 @@ export default function MovieHero({
             />
             {showReviewModal && (
               <ReviewModal
+<<<<<<< HEAD
                 movieId={movie.id}
+=======
+                movieId={movieId}
+>>>>>>> c507a3a9dc2e9884d121d2a6aaf469d2d4141bab
                 onClose={() => setShowReviewModal(false)}
+                onSuccess={() => {
+                  setShowReviewModal(false);
+                  router.refresh();
+                }}
               />
             )}
           </div>

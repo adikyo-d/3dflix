@@ -8,7 +8,6 @@ import BackButton from "./components/BackButton";
 import {
   getMovieDetail,
   getMovieCredits,
-  getMovieReviews,
   getSimilarMovies,
 } from "@/app/lib/tmdb";
 
@@ -20,7 +19,7 @@ export default async function FilmDetailPage({
   const { id } = await params;
 
   const [rows]: any = await pool.execute(
-    "SELECT tmdb_id FROM movies WHERE tmdb_id  = ?",
+    "SELECT id, tmdb_id FROM movies WHERE tmdb_id = ?",
     [id]
   );
 
@@ -30,17 +29,16 @@ export default async function FilmDetailPage({
 
   const tmdbId = rows[0].tmdb_id;
 
-  const [movie, credits, reviews, similarMovies] = await Promise.all([
+  const [movie, credits, similarMovies] = await Promise.all([
     getMovieDetail(tmdbId),
     getMovieCredits(tmdbId),
-    getMovieReviews(tmdbId),
     getSimilarMovies(tmdbId),
   ]);
 
   return (
     <main className="min-h-screen bg-black text-white">
       <BackButton />
-      <MovieHero movie={movie} />
+      <MovieHero movie={movie} movieId={rows[0].id} />
       
       <div className="
       sticky top-0
@@ -63,8 +61,7 @@ export default async function FilmDetailPage({
 
       <MovieDetails movie={movie} />
       <Cast cast={credits.cast} />
-      <Reviews 
-        reviews={reviews.results} 
+      <Reviews
         movieId={rows[0].id}
       />
       <SimilarMovies movies={similarMovies.results} />
