@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import Link from 'next/link'; 
 
 // Utility untuk memformat angka stat
@@ -307,6 +307,7 @@ const Hero = () => {
       </div>
 
       <button
+      type="button"
         id="hero-prev"
         onClick={() => goTo((current - 1 + movies.length) % movies.length)}
         className="absolute left-4 top-1/2 z-20 flex items-center justify-center transition-all duration-200"
@@ -326,6 +327,7 @@ const Hero = () => {
         <i className="fa-solid fa-chevron-left" />
       </button>
       <button
+      type="button"
         id="hero-next"
         onClick={next}
         className="absolute right-4 top-1/2 z-20 flex items-center justify-center transition-all duration-200"

@@ -41,6 +41,22 @@ export default async function FilmDetailPage({
     <main className="min-h-screen bg-black text-white">
       <BackButton />
       <MovieHero movie={movie} />
+      
+      <div className="
+      sticky top-0
+      z-50
+      bg-black/90
+      backdrop-blur-md
+      border-b border-cyan-500/20
+     ">
+       <div className="max-w-7xl mx-auto px-8 py-4 flex gap-8 text-cyan-400 font-semibold uppercase">
+        <a href="#overview">Overview</a>
+        <a href="#cast">Cast</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#similar">Related</a>
+       </div>
+      </div>
+
       <MovieDetails movie={movie} />
       <Cast cast={credits.cast} />
       <Reviews reviews={reviews.results} />

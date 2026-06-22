@@ -10,7 +10,7 @@ export default function Reviews({
   }
   
   return (
-    <section className="max-w-7xl mx-auto px-10 mt-16 pb-20">
+    <section id="reviews">
       <h2 className="text-2xl font-bold mb-6">
         Reviews
       </h2>

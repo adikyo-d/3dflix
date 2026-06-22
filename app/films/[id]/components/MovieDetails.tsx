@@ -49,6 +49,11 @@ export default function MovieDetails({
         </div>
 
       </div>
+
+      <section id="overview">
+        
+      </section>
     </section>
+    
   );
 }
