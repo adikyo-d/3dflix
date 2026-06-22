@@ -9,7 +9,6 @@ import { useSession, signOut } from "next-auth/react";
 const NAV_LINKS = [
   { label: "Films", href: "/films", icon: "fa-film" },
   { label: "Lists", href: "/lists", icon: "fa-table-cells" },
-  { label: "Members", href: "/members", icon: "fa-users" },
 ];
 
 const SECTION_LINKS = [

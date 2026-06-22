@@ -151,24 +151,41 @@ Menyimpan daftar film yang ingin ditonton.
 ## Struktur Proyek
 
 ```
-3dflix-project/
-├── app/
-│   ├── api/
-│   │   ├── auth/
-│   │   │   ├── [...nextauth]/route.ts   # Auth.js catch-all handler
-│   │   │   └── register/route.ts        # API registrasi pengguna
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Navbar.tsx               # Navbar dengan useSession()
-│   │   │   └── Footer.tsx
-│   │   └── Providers.tsx                # SessionProvider wrapper
-│   ├── lib/
-│   │   └── db.ts                        # MySQL connection pool
-│   ├── login/page.tsx                   # Halaman login
-│   ├── register/page.tsx                # Halaman registrasi
-│   ├── layout.tsx                       # Root layout
-│   └── page.tsx                         # Halaman utama (Home)
-├── auth.ts                              # Konfigurasi Auth.js (CredentialsProvider)
-├── .env                                 # Environment variables (tidak di-commit)
-└── README.md
+3dflix/
+├── app/                        # Direktori utama Next.js (App Router)
+│   ├── admin/                  # Dashboard manajemen panel Admin
+│   ├── api/                    # Endpoint API internal (Backend routes)
+│   │   ├── admin/              # API internal khusus kebutuhan panel admin
+│   │   │   ├── movies/         # Rute API manajemen film oleh admin
+│   │   │   ├── reviews/        # Rute API moderasi ulasan oleh admin
+│   │   │   ├── stats/          # Rute API data statistik dashboard admin
+│   │   │   └── users/          # Rute API pengelolaan data pengguna
+│   │   ├── auth/               # Endpoint otentikasi ([...nextauth])
+│   │   ├── genres/             # API untuk manajemen data genre film
+│   │   ├── movies/             # API operasi film (like, reviews, watchlist)
+│   │   └── seed/               # Script/endpoint pengisian data awal database
+│   ├── components/             # Komponen UI global yang reusable
+│   │   ├── layout/             # Komponen tata letak (Navbar.tsx, Footer.tsx)
+│   │   ├── movie/              # Komponen spesifik film (MovieCard, HeroCarousel, dll.)
+│   │   └── ui/                 # Komponen dasar atomik antarmuka
+│   ├── diary/                  # Fitur/halaman catatan film pengguna
+│   ├── films/                  # Halaman daftar film dan detail film dinamis ([id])
+│   ├── lib/                    # Utilitas backend dan konfigurasi (db.ts, tmdb.ts, dll.)
+│   ├── likes/                  # Halaman daftar film yang disukai pengguna
+│   ├── lists/                  # Halaman manajemen daftar tontonan kustom
+│   ├── login/ & register/      # Halaman antarmuka otentikasi pengguna
+│   ├── members/                # Halaman direktori anggota/komunitas
+│   ├── profile/ & settings/    # Halaman pengaturan akun dan profil user
+│   ├── globals.css             # Style CSS global berkekuatan Tailwind
+│   ├── layout.tsx              # Root layout utama aplikasi
+│   └── page.tsx                # Landing page / Halaman utama 3DFlix
+├── db/                         # File skrip basis data (migration.sql, upgrade_watchlists.sql)
+├── types/                      # Pendefinisian tipe data TypeScript global (next-auth.d.ts)
+├── .env                        # Konfigurasi Environment variables (rahasia)
+├── 3dflix.sql                  # Salinan/dump basis data utama proyek
+├── auth.ts                     # Konfigurasi inti sistem otentikasi NextAuth
+├── middleware.ts               # Proteksi rute halaman (Route guarding & session check)
+├── next.config.ts              # Konfigurasi kustom Next.js
+├── package.json                # Daftar dependensi proyek dan skrip eksekusi
+└── tsconfig.json               # Konfigurasi kompiler TypeScript
 ```
