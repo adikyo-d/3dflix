@@ -41,9 +41,32 @@ export default async function FilmDetailPage({
     <main className="min-h-screen bg-black text-white">
       <BackButton />
       <MovieHero movie={movie} />
+      
+      <div className="
+      sticky top-0
+      z-50
+      bg-[#14181c]/95
+      backdrop-blur-md
+      border-b 
+     "
+      style={{
+         borderColor: "rgba(0,224,84,0.2)"
+     }}
+     >
+       <div className="max-w-7xl mx-auto px-8 py-4 flex gap-8 font-semibold uppercase">
+        <a href="#overview" className="text-[#00e054] hover:text-white transition">Overview</a>
+        <a href="#cast" className="text-[#00e054] hover:text-white transition">Cast</a>
+        <a href="#reviews" className="text-[#00e054] hover:text-white transition">Reviews</a>
+        <a href="#similar" className="text-[#00e054] hover:text-white transition">Similar Movies</a>
+       </div>
+      </div>
+
       <MovieDetails movie={movie} />
       <Cast cast={credits.cast} />
-      <Reviews reviews={reviews.results} />
+      <Reviews 
+        reviews={reviews.results} 
+        movieId={rows[0].id}
+      />
       <SimilarMovies movies={similarMovies.results} />
     </main>
   );

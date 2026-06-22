@@ -12,7 +12,7 @@ export default function SimilarMovies({
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-10 mt-16 pb-20">
+    <section id="similar">
       <h2 className="text-2xl font-bold mb-6">
         Similar Movies
       </h2>

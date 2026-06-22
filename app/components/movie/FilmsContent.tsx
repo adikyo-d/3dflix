@@ -133,12 +133,13 @@ export default function FilmsContent({
         const res = await fetch(`/api/movies?${apiParams}`);
         const data = await res.json();
 
-        const results = (data.results || []).map((m: any) => ({
+        const results: LocalMovie[] = (data.results ?? []).map(
+          (m: any): LocalMovie => ({
           ...m,
           genre_ids: m.genres
             ? m.genres.map((g: any) => g.tmdb_id)
             : m.genre_ids || [],
-        }));
+          }) );
 
         setMovies(results);
         setTotalPages(data.total_pages || 0);
@@ -153,7 +154,11 @@ export default function FilmsContent({
   );
 
   const applyFilters = (overrides: Record<string, string | number> = {}) => {
-    const merged: Record<string, string | number> = { ...overrides, page: 1 };
+    const merged = {
+      ...overrides,
+      page: 1, 
+    } as Record<string, string | number>;
+    
     if ("query" in overrides) {
       setQuery(String(overrides.query || ""));
       merged.q = overrides.query || "";
@@ -212,7 +217,7 @@ export default function FilmsContent({
 
   const hasActiveFilters = query || genre || year || mood || sort !== "popularity.desc";
 
-  const years = [];
+  const years: number[] = [];   
   for (let y = CURRENT_YEAR; y >= YEAR_START; y--) years.push(y);
 
   return (
@@ -250,6 +255,7 @@ export default function FilmsContent({
 
       {/* Filter Toggle (Mobile) */}
       <button
+      type="button"
         onClick={() => setShowFilters(!showFilters)}
         className="md:hidden w-full mb-4 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#1c2228] border border-[#2c3440] rounded-xl text-sm font-bold text-[#9ab] hover:text-white transition-colors"
       >
@@ -274,6 +280,7 @@ export default function FilmsContent({
           <div className="flex flex-wrap gap-2">
             {SORT_OPTIONS.map((opt) => (
               <button
+              type="button"
                 key={opt.value}
                 onClick={() => applyFilters({ sort: opt.value })}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all ${
@@ -350,6 +357,7 @@ export default function FilmsContent({
             <div className="flex flex-wrap gap-1.5">
               {MOODS.map((m) => (
                 <button
+                type="button"
                   key={m.value}
                   onClick={() => {
                     const newMood = mood === m.value ? "" : m.value;
@@ -411,6 +419,7 @@ export default function FilmsContent({
               />
             )}
             <button
+            type="button"
               onClick={clearFilters}
               className="text-[11px] font-bold text-red-400 hover:text-red-300 uppercase tracking-wide ml-2 transition-colors"
             >
@@ -462,6 +471,7 @@ export default function FilmsContent({
             Coba ubah filter atau kata kunci pencarian kamu
           </p>
           <button
+          type="button"
             onClick={clearFilters}
             className="px-5 py-2.5 bg-[#00e054] text-black rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-[#00c04b] transition-colors"
           >
@@ -488,6 +498,7 @@ export default function FilmsContent({
               </span>
             ) : (
               <button
+              type="button"
                 key={p}
                 onClick={() => goToPage(p as number)}
                 className={`min-w-[36px] px-3 py-2 rounded-lg text-xs font-bold transition-all ${
@@ -501,7 +512,7 @@ export default function FilmsContent({
             )
           )}
 
-          <button aria-label="Next Page"
+          <button type="button" aria-label="Next Page"
             onClick={() => goToPage(page + 1)}
             disabled={page >= totalPages}
             className="px-3 py-2 rounded-lg text-xs font-bold bg-[#1c2228] border border-[#2c3440] text-[#9ab] hover:text-white hover:border-[#00e054]/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
@@ -529,7 +540,7 @@ function FilmCard({
   const movieYear = movie.release_date?.substring(0, 4) || "";
   const movieGenres = movie.genre_ids
     .map((id) => genres.find((g) => g.id === id)?.name)
-    .filter(Boolean)
+    .filter((name): name is string => Boolean(name))
     .slice(0, 2);
 
   return (

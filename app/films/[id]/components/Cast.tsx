@@ -8,7 +8,7 @@ export default function Cast({ cast }: CastProps) {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-10 mt-16">
+    <section id="cast">
       <h2 className="text-2xl font-bold mb-6">
         Cast
       </h2>
