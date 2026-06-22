@@ -22,6 +22,34 @@ export default function MovieHero({
 }) {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const { data: session } = useSession(); const router = useRouter();
+  const handleWatchlist = async () => {
+  if (!session) {
+    router.push("/login");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/watchlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: session.user.id,
+        movie_id: movie.id,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("✅ Film berhasil ditambahkan ke Watchlist");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Gagal menambahkan watchlist");
+  }
+};
   
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
@@ -76,11 +104,14 @@ export default function MovieHero({
 
                   setShowReviewModal(true);}}
 
-                className="px-8 py-4 rounded-xl bg-[#00e054] text-black font-bold hover:bg-[#00ff66] transition">
+                className="px-8 py-4 rounded-xl bg-[#00e054] text-black transition-all duration-300 font-bold hover:bg-[#00ff66] hover:scale-105 hover:shadow-[0_0_25px_rgba(0,224,84,0.6)]">
                 ⭐ RATE & REVIEW
               </button>
 
-              <button className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition">
+              <button 
+                onClick={handleWatchlist}
+                className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition"
+              >
                 ❤ ADD TO WATCHLIST
               </button>
             </div>
