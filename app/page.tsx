@@ -1,18 +1,16 @@
-// app/page.tsx
-import { getTrendingMoviesForHero } from "@/app/lib/tmdb";
-import HeroCarousel from "@/app/components/movie/HeroCarousel"; // Path ke carousel Anda
 import Hero from "./components/movie/Hero";
+import TrendingSection from "./components/movie/TrendingSection";
+import PopularSection from "./components/movie/PopularSection";
+import { getHomeMovieSections } from "./lib/home-movies";
 
 export default async function Home() {
-  // Fetch data berjalan di server
-  const movies = await getTrendingMoviesForHero();
+  const { trending, mostWatched, topRated } = await getHomeMovieSections();
 
   return (
     <main className="min-h-screen bg-[#0f0f0f]">
-      <Hero/>
-      <HeroCarousel movies={movies}/>
-      
-      {/* Konten 3dflix lainnya di bawah sini */}
+      <Hero />
+      <TrendingSection movies={trending} />
+      <PopularSection mostWatched={mostWatched} topRated={topRated} />
     </main>
   );
 }
