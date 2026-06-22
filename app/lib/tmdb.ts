@@ -163,6 +163,11 @@ export async function getMovieDetail(id: string) {
     );
 
     if (!res.ok) {
+      console.log("STATUS:", res.status);
+      console.log("URL:", res.url);
+      const text = await res.text();
+      console.log("RESPONSE:", text);
+
       throw new Error("Gagal mengambil detail film");
     }
 
@@ -190,6 +195,10 @@ export async function getMovieCredits(id: string) {
   );
 
   if (!res.ok) {
+    console.log("STATUS:", res.status);
+    console.log("URL:", res.url);
+    const text = await res.text();
+    console.log("RESPONSE:", text);
     throw new Error("Gagal mengambil data cast");
   }
 
@@ -207,6 +216,10 @@ export async function getMovieReviews(id: string) {
   );
 
   if (!res.ok) {
+    console.log("STATUS:", res.status);
+    console.log("URL:", res.url);
+    const text = await res.text();
+    console.log("RESPONSE:", text);
     throw new Error("Gagal mengambil reviews");
   }
 
@@ -224,6 +237,10 @@ export async function getSimilarMovies(id: string) {
   );
 
   if (!res.ok) {
+    console.log("STATUS:", res.status);
+    console.log("URL:", res.url);
+    const text = await res.text();
+    console.log("RESPONSE:", text);
     throw new Error("Gagal mengambil similar movies");
   }
 

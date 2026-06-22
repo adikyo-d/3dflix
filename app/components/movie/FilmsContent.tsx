@@ -534,7 +534,7 @@ function FilmCard({
 
   return (
     <Link
-      href={`/films/${movie.id}`}
+      href={`/films/${movie.tmdb_id}`}
       className="group relative flex flex-col rounded-xl overflow-hidden cursor-pointer select-none"
     >
       <div className="relative aspect-2/3 w-full overflow-hidden rounded-xl">

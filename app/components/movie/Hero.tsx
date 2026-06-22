@@ -225,7 +225,7 @@ const Hero = () => {
 
             <div className="flex items-center gap-4 flex-wrap">
               <Link
-                href={`/movie/${movie.id}`}
+                href={`/films/${movie.id}`}
                 id={`hero-cta-watch-${movie.id}`}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-all duration-200"
                 style={{
