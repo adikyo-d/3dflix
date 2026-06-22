@@ -1,7 +1,7 @@
 # 3DFLIX
 
 ## Deskripsi Singkat
-**3DFLIX** adalah platform jejaring sosial untuk para pecinta film, terinspirasi dari Letterboxd. Platform ini memungkinkan pengguna untuk menemukan film baru, melacak film yang telah ditonton, memberikan rating, menulis ulasan, serta berinteraksi dengan sesama komunitas penggemar film.
+**3DFLIX** adalah aplikasi web berbasis Next.js yang menyediakan platform bagi pengguna untuk mendapatkan rekomendasi film berdasarkan mood, mencari informasi film, memberikan rating dan ulasan, menyimpan film ke dalam watchlist, serta menyukai film favorit. Data film diperoleh melalui TMDB API, sedangkan data pengguna dan aktivitasnya dikelola menggunakan database MySQL.
 
 ---
 
@@ -25,13 +25,13 @@
 ### 2. Member (Pengguna Terdaftar)
 - **Semua fitur Guest**
 - **User Profile**: Menampilkan profil dan aktivitas pengguna.
-- **Log / Review Movie**: Menambahkan film ke jurnal, memberikan rating, dan menulis ulasan.
+- **Log / Review Movie**: Menambahkan film ke watchlist, memberikan rating, dan menulis ulasan.
 - **Watchlist**: Menyimpan film yang ingin ditonton di masa mendatang.
 - **Sign Out**: Keluar dari sesi dengan aman.
 
 ### 3. Admin
 - **Admin Dashboard**: Ringkasan statistik platform.
-- **Manage Users**: Melihat, memblokir, atau menghapus akun pengguna.
+- **Manage Users**: Melihat data pengguna yang terdaftar.
 - **Manage Reviews**: Memantau dan menghapus ulasan yang melanggar ketentuan.
 
 ---
