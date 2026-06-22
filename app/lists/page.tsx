@@ -3,26 +3,31 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
  
 export default async function ListPage() {
-     const session = await auth();
+  const session = await auth();
+  console.log("SESSION:", session);
 
   if (!session) {
     redirect("/login");
   }
 
-  const [watchlists]: any = await pool.execute(`
+ const [watchlists]: any = await pool.execute(
+  `
   SELECT
-  w.id,
-  w.user_id,
-  w.movie_id,
-  w.created_at,
-  m.title,
-  m.poster_path,
-  m.tmdb_id
-FROM watchlists w
-JOIN movies m
-  ON w.movie_id = m.tmdb_id
-ORDER BY w.created_at DESC
-`);
+    w.id,
+    w.user_id,
+    w.movie_id,
+    w.created_at,
+    m.title,
+    m.poster_path,
+    m.tmdb_id
+  FROM watchlists w
+  JOIN movies m
+    ON w.movie_id = m.tmdb_id
+  WHERE w.user_id = ?
+  ORDER BY w.created_at DESC
+  `,
+  [session.user.id]
+);
 
 console.log("WATCHLIST:", watchlists);
 

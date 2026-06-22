@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
         (SELECT COUNT(*) FROM likes l WHERE l.movie_id = m.id) as like_count,
         (SELECT COUNT(*) FROM reviews r WHERE r.movie_id = m.id) as review_count,
         (SELECT AVG(r.rating) FROM reviews r WHERE r.movie_id = m.id) as avg_rating,
-        (SELECT COUNT(*) FROM watchlists w WHERE w.movie_id = m.id AND w.watched = true) as watch_count
+        (SELECT COUNT(*) FROM watchlists w WHERE w.movie_id = m.tmdb_id) as watch_count
        FROM movies m
        ${whereClause}
        ORDER BY ${orderBy}
