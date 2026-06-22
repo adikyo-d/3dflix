@@ -1,6 +1,14 @@
 import pool from "@/app/lib/db";
-
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+ 
 export default async function ListPage() {
+     const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   const [watchlists]: any = await pool.execute(`
   SELECT
   w.id,
