@@ -4,6 +4,7 @@ import MovieDetails from "./components/MovieDetails";
 import Cast from "./components/Cast";
 import Reviews from "./components/Reviews";
 import SimilarMovies from "./components/SimilarMovies";
+import BackButton from "./components/BackButton";
 import {
   getMovieDetail,
   getMovieCredits,
@@ -38,6 +39,7 @@ export default async function FilmDetailPage({
 
   return (
     <main className="min-h-screen bg-black text-white">
+      <BackButton />
       <MovieHero movie={movie} />
       <MovieDetails movie={movie} />
       <Cast cast={credits.cast} />

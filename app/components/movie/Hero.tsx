@@ -246,7 +246,7 @@ const Hero = () => {
                 Rate & Review
               </Link>
               <Link
-                href={`/movie/${movie.id}`}
+                href={`/films/${movie.id}`}
                 id={`hero-cta-detail-${movie.id}`}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide border transition-all duration-200"
                 style={{ borderColor: '#2c3440', color: '#9ab' }}
