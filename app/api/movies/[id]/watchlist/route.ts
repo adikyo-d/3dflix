@@ -11,26 +11,26 @@ export async function GET(
 
   try {
     const [countRows]: any = await pool.execute(
-      "SELECT COUNT(*) as count FROM watchlist WHERE movie_id = ? AND watched = true",
+      "SELECT COUNT(*) as count FROM watchlists WHERE movie_id = ? AND watched = true",
       [id]
     );
 
-    let inWatchlist = false;
+    let inWatchlists = false;
     let watched = false;
     if (session?.user?.id) {
       const [userWatch]: any = await pool.execute(
-        "SELECT id, watched FROM watchlist WHERE user_id = ? AND movie_id = ?",
+        "SELECT id, watched FROM watchlists WHERE user_id = ? AND movie_id = ?",
         [session.user.id, id]
       );
       if (userWatch.length > 0) {
-        inWatchlist = true;
+        inWatchlists = true;
         watched = !!userWatch[0].watched;
       }
     }
 
     return NextResponse.json({
       watch_count: countRows[0].count,
-      in_watchlist: inWatchlist,
+      in_watchlist: inWatchlists,
       watched,
     });
   } catch (error: any) {
@@ -53,7 +53,7 @@ export async function POST(
     const { watched } = await request.json();
 
     await pool.execute(
-      `INSERT INTO watchlist (user_id, movie_id, watched)
+      `INSERT INTO watchlists (user_id, movie_id, watched)
        VALUES (?, ?, ?)
        ON DUPLICATE KEY UPDATE watched = VALUES(watched)`,
       [session.user.id, id, watched ?? false]
@@ -78,7 +78,7 @@ export async function DELETE(
 
   try {
     await pool.execute(
-      "DELETE FROM watchlist WHERE user_id = ? AND movie_id = ?",
+      "DELETE FROM watchlists WHERE user_id = ? AND movie_id = ?",
       [session.user.id, id]
     );
 

@@ -3,27 +3,30 @@ import pool from "@/app/lib/db";
 export default async function ListPage() {
   const [watchlists]: any = await pool.execute(`
   SELECT
-    w.id,
-    w.user_id,
-    w.movie_id,
-    m.title,
-    m.poster_path,
-    m.tmdb_id
-  FROM watchlists w
-  JOIN movies m
-    ON w.movie_id = m.id
-  ORDER BY w.created_at DESC
+  w.id,
+  w.user_id,
+  w.movie_id,
+  w.created_at,
+  m.title,
+  m.poster_path,
+  m.tmdb_id
+FROM watchlists w
+JOIN movies m
+  ON w.movie_id = m.tmdb_id
+ORDER BY w.created_at DESC
 `);
 
+console.log("WATCHLIST:", watchlists);
+
   return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-4xl font-bold text-[#00e054] mb-8">
-        My Watchlist
-      </h1>
+    <main className="min-h-screen bg-[#14181c] text-white p-10">
+        <h1 className="text-4xl font-bold text-[#00e054] mb-8">
+          My Watchlists
+        </h1>
 
       {watchlists.length === 0 ? (
         <p className="text-gray-400">
-          Belum ada film di watchlist.
+          Belum ada film di watchlists.
         </p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">

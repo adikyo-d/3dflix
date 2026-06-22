@@ -6,7 +6,7 @@ ALTER TABLE users
 DROP TABLE IF EXISTS movie_genres;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS watchlist;
+DROP TABLE IF EXISTS watchlists;
 DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS genres;
 
@@ -64,8 +64,8 @@ CREATE TABLE reviews (
   FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
 
--- Tabel watchlist (user menandai film ditonton/ingin ditonton)
-CREATE TABLE watchlist (
+-- Tabel watchlists (user menandai film ditonton/ingin ditonton)
+CREATE TABLE watchlists (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   movie_id INT NOT NULL,

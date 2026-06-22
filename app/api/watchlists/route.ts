@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Berhasil ditambahkan ke watchlist",
+      message: "Berhasil ditambahkan ke watchlists",
     });
   } catch (error) {
     console.error(error);

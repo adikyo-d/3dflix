@@ -29,7 +29,7 @@ export default function MovieHero({
   }
 
   try {
-    const res = await fetch("/api/watchlist", {
+    const res = await fetch("/api/watchlists", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,11 +43,11 @@ export default function MovieHero({
     const data = await res.json();
 
     if (data.success) {
-      alert("✅ Film berhasil ditambahkan ke Watchlist");
+      alert("✅ Film berhasil ditambahkan ke Watchlists");
     }
   } catch (error) {
     console.error(error);
-    alert("Gagal menambahkan watchlist");
+    alert("Gagal menambahkan watchlists");
   }
 };
   
