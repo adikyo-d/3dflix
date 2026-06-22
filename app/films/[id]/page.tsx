@@ -45,15 +45,19 @@ export default async function FilmDetailPage({
       <div className="
       sticky top-0
       z-50
-      bg-black/90
+      bg-[#14181c]/95
       backdrop-blur-md
-      border-b border-cyan-500/20
-     ">
-       <div className="max-w-7xl mx-auto px-8 py-4 flex gap-8 text-cyan-400 font-semibold uppercase">
-        <a href="#overview">Overview</a>
-        <a href="#cast">Cast</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#similar">Related</a>
+      border-b 
+     "
+      style={{
+         borderColor: "rgba(0,224,84,0.2)"
+     }}
+     >
+       <div className="max-w-7xl mx-auto px-8 py-4 flex gap-8 font-semibold uppercase">
+        <a href="#overview" className="text-[#00e054] hover:text-white transition">Overview</a>
+        <a href="#cast" className="text-[#00e054] hover:text-white transition">Cast</a>
+        <a href="#reviews" className="text-[#00e054] hover:text-white transition">Reviews</a>
+        <a href="#similar" className="text-[#00e054] hover:text-white transition">Similar Movies</a>
        </div>
       </div>
 

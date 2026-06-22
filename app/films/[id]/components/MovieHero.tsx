@@ -7,10 +7,6 @@ interface Movie {
   vote_count: number;
   runtime: number;
   release_date: string;
-  genres: {
-    id: number;
-    name: string;
-  }[];
 }
 
 export default function MovieHero({
@@ -34,105 +30,108 @@ export default function MovieHero({
       <div className="absolute inset-0 bg-black/80" />
 
       {/* GLOW */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-green-500/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#00e054]/10 via-transparent to-[#00e054]/5" />
 
       {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-16">
-        <div className="grid lg:grid-cols-[1fr_340px] gap-6 items-center">
-
-          {/* KIRI */}
+        <div className="grid lg:grid-cols-[1fr_380px] gap-12 items-start">
+          
+          {/* LEFT SIDE */}
           <div>
             <div className="mb-4">
-              <span className="px-4 py-2 rounded-full border border-cyan-400 text-cyan-400 text-sm">
+              <span className="px-4 py-2 rounded-full border border-[#00e054] text-[#00e054] text-sm font-semibold">
                 FEATURED MOVIE
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-black uppercase text-white mb-2">
+            <h1 className="text-5xl md:text-6xl font-black uppercase text-white mb-3">
               {movie.title}
             </h1>
 
-           <div className="flex gap-3 text-gray-300 mb-4">
+            <div className="flex gap-3 text-gray-300 mb-5">
               <span>{movie.release_date}</span>
               <span>•</span>
               <span>{movie.runtime || 0} min</span>
             </div>
 
-            <p className="max-w-3xl text-gray-400 leading-relaxed mb-5">
+            <p className="max-w-3xl text-gray-400 leading-relaxed mb-8">
               {movie.overview}
             </p>
 
-            <div className="flex gap-4">
-              <button className="px-8 py-4 rounded-xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition">
+            <div className="flex gap-4 flex-wrap mb-8">
+              <button className="px-8 py-4 rounded-xl bg-[#00e054] text-black font-bold hover:bg-[#00ff66] transition">
                 ▶ PLAY MOVIE
               </button>
 
-              <button className="px-8 py-4 rounded-xl border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black transition">
+              <button className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition">
                 + WATCHLIST
               </button>
             </div>
-          </div>
 
-          {/* KANAN */}
-          <div className="space-y-4">
-           <div className="overflow-hidden rounded-3xl border border-cyan-500/30 shadow-2xl">
-              <img
-                src={movie.poster_path ?  `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : "/no-image.png"}
-                alt={movie.title}
-                className="w-full h-[520px] object-cover"
-              />
-            </div>
+            {/* METRICS + VISUAL */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-black/50 backdrop-blur-md border border-[#00e054]/30 rounded-2xl p-6">
+                <h3 className="text-[#00e054] font-bold mb-4">
+                  METRICS
+                </h3>
 
-            <div className="bg-black/50 backdrop-blur-md border border-cyan-500/30 rounded-2xl p-5">
-              <h3 className="text-cyan-400 font-bold mb-4">
-                METRICS
-              </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-3xl font-bold text-white">
+                      {movie.vote_average?.toFixed(1)}
+                    </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <div className="text-3xl font-bold text-white">
-                    {movie.vote_average?.toFixed(1)}
+                    <div className="text-sm text-gray-500">
+                      Rating
+                    </div>
                   </div>
 
-                  <div className="text-sm text-gray-500">
-                    Rating
-                  </div>
-                </div>
+                  <div>
+                    <div className="text-3xl font-bold text-white">
+                      {movie.vote_count}
+                    </div>
 
-                <div>
-                  <div className="text-3xl font-bold text-white">
-                    {movie.vote_count}
-                  </div>
-
-                  <div className="text-sm text-gray-500">
-                    Votes
+                    <div className="text-sm text-gray-500">
+                      Votes
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-black/40 backdrop-blur-md border border-green-500/30 rounded-2xl p-6">
-              <h3 className="text-green-400 mb-4">
-                VISUAL EXPERIENCE
-              </h3>
+              <div className="bg-black/50 backdrop-blur-md border border-[#00e054]/30 rounded-2xl p-6">
+                <h3 className="text-[#00e054] font-bold mb-4">
+                  VISUAL EXPERIENCE
+                </h3>
 
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 rounded border border-green-500/30">
-                  4K
-                </span>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded border border-[#00e054]/30">
+                    4K
+                  </span>
 
-                <span className="px-3 py-1 rounded border border-green-500/30">
-                  HDR
-                </span>
+                  <span className="px-3 py-1 rounded border border-[#00e054]/30">
+                    HDR
+                  </span>
 
-                <span className="px-3 py-1 rounded border border-green-500/30">
-                  ATMOS
-                </span>
+                  <span className="px-3 py-1 rounded border border-[#00e054]/30">
+                    ATMOS
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
+          {/* RIGHT SIDE - POSTER */}
+          <div className="flex justify-center lg:justify-end">
+            <img
+              src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
+              alt={movie.title}
+              className="w-full max-w-[380px] rounded-3xl object-cover border border-[#00e054]/20"
+              style={{
+                boxShadow:
+                  "0 0 40px rgba(0,224,84,0.15), 0 20px 60px rgba(0,0,0,0.6)",
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>

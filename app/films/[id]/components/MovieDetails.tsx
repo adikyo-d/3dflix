@@ -5,55 +5,78 @@ interface MovieDetailsProps {
 export default function MovieDetails({
   movie,
 }: MovieDetailsProps) {
-  console.log(movie);
-  console.log(movie.overview);
-  
   return (
-    <section className="max-w-7xl mx-auto px-10 mt-16">
-      <h2 className="text-2xl font-bold mb-4">
-        Synopsis
-      </h2>
+    <section
+      id="overview"
+      className="max-w-7xl mx-auto px-6 lg:px-10 py-16"
+    >
+      <div className="grid lg:grid-cols-[2fr_1fr] gap-8">
 
-      <h1 className="text-red-500">
-        {movie.title}
-      </h1>
+        {/* SYNOPSIS */}
+        <div className="bg-[#14181c] border border-[#00e054]/20 rounded-3xl p-8">
+          <h2 className="text-3xl font-bold text-[#00e054] mb-6">
+            Synopsis
+          </h2>
 
-      <p>
-        {movie.overview || "Sinopsis tidak tersedia"}
-      </p>
-
-      <div className="grid grid-cols-2 gap-4 mt-8 text-gray-300">
-
-        <div>
-          <p className="text-gray-500">Release Date</p>
-          <p>{movie.release_date}</p>
-        </div>
-
-        <div>
-          <p className="text-gray-500">Runtime</p>
-          <p>{movie.runtime} Minutes</p>
-        </div>
-
-        <div>
-          <p className="text-gray-500">Language</p>
-          <p> 
-            {movie.spoken_languages
-              ?.map((lang: any) => lang.english_name)
-              .join(", ")}
+          <p className="text-gray-300 leading-8 text-lg">
+            {movie.overview || "Synopsis belum tersedia."}
           </p>
         </div>
 
-        <div>
-          <p className="text-gray-500">Status</p>
-          <p>{movie.status}</p>
+        {/* INFO PANEL */}
+        <div className="bg-[#14181c] border border-[#00e054]/20 rounded-3xl p-8">
+          <h2 className="text-2xl font-bold text-[#00e054] mb-6">
+            Information
+          </h2>
+
+          <div className="space-y-6">
+
+            <div>
+              <p className="text-gray-500 text-sm uppercase">
+                Release Date
+              </p>
+
+              <p className="text-white font-semibold">
+                {movie.release_date}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm uppercase">
+                Runtime
+              </p>
+
+              <p className="text-white font-semibold">
+                {movie.runtime} Minutes
+              </p>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm uppercase">
+                Language
+              </p>
+
+              <p className="text-white font-semibold">
+                {movie.spoken_languages
+                  ?.map((lang: any) => lang.english_name)
+                  .join(", ")}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm uppercase">
+                Status
+              </p>
+
+              <p className="text-green-400 font-semibold">
+                {movie.status}
+              </p>
+            </div>
+
+          </div>
         </div>
 
       </div>
-
-      <section id="overview">
-        
-      </section>
     </section>
-    
   );
 }
