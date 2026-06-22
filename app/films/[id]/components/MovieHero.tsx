@@ -214,11 +214,7 @@ export default function MovieHero({
             />
             {showReviewModal && (
               <ReviewModal
-<<<<<<< HEAD
-                movieId={movie.id}
-=======
-                movieId={movieId}
->>>>>>> c507a3a9dc2e9884d121d2a6aaf469d2d4141bab
+                movieId={movieid}
                 onClose={() => setShowReviewModal(false)}
                 onSuccess={() => {
                   setShowReviewModal(false);
