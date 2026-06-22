@@ -10,7 +10,7 @@ export async function GET(
 
   try {
     const [reviews]: any = await pool.execute(
-      `SELECT r.id, r.rating, r.content, r.created_at, u.username
+      `SELECT r.id, r.rating, r.review_text, r.created_at, u.username
        FROM reviews r
        JOIN users u ON r.user_id = u.id
        WHERE r.movie_id = ?
@@ -45,7 +45,7 @@ export async function POST(
   const { id } = await params;
 
   try {
-    const { rating, content } = await request.json();
+    const { rating, review_text } = await request.json();
 
     if (!rating || rating < 0.5 || rating > 5) {
       return NextResponse.json(
@@ -53,12 +53,18 @@ export async function POST(
         { status: 400 }
       );
     }
+    console.log({
+     userId: session.user.id,
+     movieId: id,
+     rating,
+     content,
+    });
 
     await pool.execute(
-      `INSERT INTO reviews (user_id, movie_id, rating, content)
+      `INSERT INTO reviews (user_id, movie_id, rating, review_text)
        VALUES (?, ?, ?, ?)
-       ON DUPLICATE KEY UPDATE rating = VALUES(rating), content = VALUES(content)`,
-      [session.user.id, id, rating, content || null]
+       ON DUPLICATE KEY UPDATE rating = VALUES(rating), review_text = VALUES(review_text)`,
+      [session.user.id, id, rating, review_text || null]
     );
 
     return NextResponse.json({ success: true });

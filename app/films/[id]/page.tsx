@@ -63,7 +63,10 @@ export default async function FilmDetailPage({
 
       <MovieDetails movie={movie} />
       <Cast cast={credits.cast} />
-      <Reviews reviews={reviews.results} />
+      <Reviews 
+        reviews={reviews.results} 
+        movieId={rows[0].id}
+      />
       <SimilarMovies movies={similarMovies.results} />
     </main>
   );
