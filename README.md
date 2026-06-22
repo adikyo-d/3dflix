@@ -1,7 +1,7 @@
 # 3DFLIX
 
 ## Deskripsi Singkat
-**3DFLIX** adalah aplikasi web berbasis Next.js yang menyediakan platform bagi pengguna untuk mendapatkan rekomendasi film berdasarkan mood, mencari informasi film, memberikan rating dan ulasan, menyimpan film ke dalam watchlist, serta menyukai film favorit. Data film diperoleh melalui TMDB API, sedangkan data pengguna dan aktivitasnya dikelola menggunakan database MySQL.
+**3DFLIX** adalah website berbasis Next.js yang menyediakan platform bagi pengguna untuk mendapatkan rekomendasi film berdasarkan mood, mencari informasi film, memberikan rating dan ulasan, menyimpan film ke dalam watchlist, serta menyukai film favorit. Data film diperoleh melalui TMDB API, sedangkan data pengguna dan aktivitasnya dikelola menggunakan database MySQL.
 
 ---
 
