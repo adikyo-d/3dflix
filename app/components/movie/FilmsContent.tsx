@@ -330,7 +330,7 @@ export default function FilmsContent({
             <label className="block text-[#678] text-[11px] font-bold uppercase tracking-widest mb-2">
               Tahun
             </label>
-            <select
+            <select aria-label="Select Year"
               value={year}
               onChange={(e) => applyFilters({ year: e.target.value })}
               className="w-full bg-[#1c2228] border border-[#2c3440] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#00e054] transition-colors appearance-none cursor-pointer"

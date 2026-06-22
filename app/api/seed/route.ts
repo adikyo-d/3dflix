@@ -16,7 +16,7 @@ export async function GET() {
   try {
     // 1. Fetch dan simpan genres
     const genreRes = await fetch(
-      `${TMDB_BASE_URL}/genre/movie/list?api_key=${apiKey}&language=id-ID`
+      `${TMDB_BASE_URL}/genre/movie/list?api_key=${apiKey}&language=en-US`
     );
     const genreData = await genreRes.json();
     const genres: { id: number; name: string }[] = genreData.genres || [];
@@ -39,7 +39,7 @@ export async function GET() {
 
     for (let page = 1; page <= 50; page++) {
       const movieRes = await fetch(
-        `${TMDB_BASE_URL}/discover/movie?api_key=${apiKey}&language=id-ID&sort_by=popularity.desc&include_adult=false&page=${page}`
+        `${TMDB_BASE_URL}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&page=${page}`
       );
       const movieData = await movieRes.json();
       const movies = movieData.results || [];

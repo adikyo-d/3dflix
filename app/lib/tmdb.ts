@@ -52,7 +52,7 @@ export async function getTrendingMoviesForHero(): Promise<HeroMovie[]> {
   const apiKey = getApiKey();
 
   const res = await fetch(
-    `${TMDB_BASE_URL}/trending/movie/day?api_key=${apiKey}&language=id-ID`,
+    `${TMDB_BASE_URL}/trending/movie/day?api_key=${apiKey}&language=en-US`,
     { next: { revalidate: 3600 } }
   );
 
@@ -76,7 +76,7 @@ export async function getTrendingMoviesForHero(): Promise<HeroMovie[]> {
 export async function getGenres(): Promise<Genre[]> {
   const apiKey = getApiKey();
   const res = await fetch(
-    `${TMDB_BASE_URL}/genre/movie/list?api_key=${apiKey}&language=id-ID`,
+    `${TMDB_BASE_URL}/genre/movie/list?api_key=${apiKey}&language=en-US`,
     { next: { revalidate: 86400 } }
   );
 
@@ -92,7 +92,7 @@ export async function discoverMovies(
 
   const params = new URLSearchParams({
     api_key: apiKey!,
-    language: "id-ID",
+    language: "en-US",
     include_adult: "false",
     page: String(filters.page || 1),
   });
@@ -137,7 +137,7 @@ export async function searchMovies(
   const apiKey = getApiKey();
   const params = new URLSearchParams({
     api_key: apiKey!,
-    language: "id-ID",
+    language: "en-US",
     query,
     page: String(page),
     include_adult: "false",
@@ -155,9 +155,14 @@ export async function getMovieDetail(id: string) {
   try {
     const apiKey = getApiKey();
 
+<<<<<<< HEAD
     // Ambil versi Indonesia
     const indoRes = await fetch(
       `${TMDB_BASE_URL}/movie/${id}?api_key=${apiKey}&language=id-ID`,
+=======
+    const res = await fetch(
+      `${TMDB_BASE_URL}/movie/${id}?api_key=${apiKey}&language=en-US`,
+>>>>>>> 380efa752bb748bcfd9443f60edf1b6665ebe152
       {
         next: { revalidate: 3600 },
       }
@@ -209,7 +214,7 @@ export async function getMovieCredits(id: string) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
   const res = await fetch(
-    `${TMDB_BASE_URL}/movie/${id}/credits?api_key=${apiKey}&language=id-ID`,
+    `${TMDB_BASE_URL}/movie/${id}/credits?api_key=${apiKey}&language=en-US`,
   );
 
   if (!res.ok) {
@@ -248,7 +253,7 @@ export async function getSimilarMovies(id: string) {
   const apiKey = getApiKey();
 
   const res = await fetch(
-    `${TMDB_BASE_URL}/movie/${id}/similar?api_key=${apiKey}&language=id-ID`,
+    `${TMDB_BASE_URL}/movie/${id}/similar?api_key=${apiKey}&language=en-US`,
     {
       next: { revalidate: 3600 },
     }
