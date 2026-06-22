@@ -1,3 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import ReviewModal from "./ReviewModal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 interface Movie {
   title: string;
   poster_path: string | null;
@@ -14,6 +20,9 @@ export default function MovieHero({
 }: {
   movie: Movie;
 }) {
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const { data: session } = useSession(); const router = useRouter();
+  
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
       {/* BACKDROP */}
@@ -59,12 +68,20 @@ export default function MovieHero({
             </p>
 
             <div className="flex gap-4 flex-wrap mb-8">
-              <button className="px-8 py-4 rounded-xl bg-[#00e054] text-black font-bold hover:bg-[#00ff66] transition">
-                ▶ PLAY MOVIE
+              <button 
+                onClick={() => {
+                  if (!session) {
+                    router.push("/login");
+                    return;}
+
+                  setShowReviewModal(true);}}
+
+                className="px-8 py-4 rounded-xl bg-[#00e054] text-black font-bold hover:bg-[#00ff66] transition">
+                ⭐ RATE & REVIEW
               </button>
 
               <button className="px-8 py-4 rounded-xl border border-[#00e054] text-[#00e054] hover:bg-[#00e054] hover:text-black transition">
-                + WATCHLIST
+                ❤ ADD TO WATCHLIST
               </button>
             </div>
 
@@ -131,6 +148,11 @@ export default function MovieHero({
                   "0 0 40px rgba(0,224,84,0.15), 0 20px 60px rgba(0,0,0,0.6)",
               }}
             />
+            {showReviewModal && (
+              <ReviewModal
+                onClose={() => setShowReviewModal(false)}
+              />
+            )}
           </div>
         </div>
       </div>

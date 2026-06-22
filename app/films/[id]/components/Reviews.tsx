@@ -86,49 +86,6 @@ export default function Reviews({
         Reviews
       </h2>
 
-      {/* FORM */}
-      <div className="bg-[#14181c] border border-[#00e054]/20 rounded-3xl p-8 mb-12">
-        <h3 className="text-2xl font-bold text-[#00e054] mb-6">
-          Write a Review
-        </h3>
-
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name..."
-          className="w-full bg-black border border-[#00e054]/20 rounded-xl p-4 text-white mb-4"
-        />
-
-        <select
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          className="w-full bg-black border border-[#00e054]/20 rounded-xl p-4 text-white mb-4"
-        >
-          <option value={1}>⭐ 1 Star</option>
-          <option value={2}>⭐⭐ 2 Stars</option>
-          <option value={3}>⭐⭐⭐ 3 Stars</option>
-          <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
-          <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
-        </select>
-
-        <textarea
-          rows={5}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your review..."
-          className="w-full bg-black border border-[#00e054]/20 rounded-xl p-4 text-white mb-4"
-        />
-
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="px-8 py-3 rounded-xl bg-[#00e054] text-black font-bold hover:bg-[#00ff66] transition"
-        >
-          {loading ? "Submitting..." : "Submit Review"}
-        </button>
-      </div>
-
       {/* LIST REVIEW */}
       <div className="grid gap-6">
         {reviewList?.length > 0 ? (
