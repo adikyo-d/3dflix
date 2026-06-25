@@ -37,7 +37,7 @@ export async function GET() {
 
     let totalInserted = 0;
 
-    for (let page = 1; page <= 50; page++) {
+    for (let page = 1; page <= 100; page++) {
       const movieRes = await fetch(
         `${TMDB_BASE_URL}/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&page=${page}`
       );

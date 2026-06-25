@@ -307,7 +307,7 @@ const Hero = () => {
       </div>
 
       <button
-      type="button"
+      type="button" 
         id="hero-prev"
         onClick={() => goTo((current - 1 + movies.length) % movies.length)}
         className="absolute left-4 top-1/2 z-20 flex items-center justify-center transition-all duration-200"

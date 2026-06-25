@@ -15,6 +15,18 @@
 
 ---
 
+## Screenshot Aplikasi
+
+### 1. Halaman Home
+![Home Page](screenshots/home.png)
+
+### 2. Halaman Films
+![Films Page](screenshots/films.png)
+
+### 3. Halaman Admin Dashboard
+![Admin Dashboard](screenshots/admin.png)
+---
+
 ## Aktor dan Fitur (Menu / Sitemap)
 
 ### 1. Guest (Pengguna Tidak Terdaftar)
@@ -47,6 +59,32 @@
 | **Database** | MySQL (via `mysql2`) |
 | **Password Hashing** | `bcryptjs` |
 | **External API** | [TMDB (The Movie Database)](https://www.themoviedb.org/) — poster, sinopsis, dan metadata film |
+
+---
+
+## AI yang Digunakan
+
+| AI Tool | Kegunaan |
+| :--- | :--- |
+| **Claude Code (Anthropic)** | Digunakan sebagai asisten utama dalam pengembangan proyek. Membantu dalam debugging, memahahami aturan dan cara kerja framework, dan pemecahan masalah teknis selama pengembangan. |
+
+---
+
+## Bug Log
+
+Daftar bug yang ditemukan dan diperbaiki selama pengembangan:
+
+| No | Bug | File | Penyebab | Solusi | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | `movieid is not defined` | `app/films/[id]/components/MovieHero.tsx` (line 217) | Variabel `movieid` belum dideklarasikan — typo pada penamaan variabel (seharusnya `movieId` dengan huruf kapital 'I'). | Mengganti `movieid` menjadi `movieId` sesuai dengan props yang diterima komponen. | Selesai |
+| 2 | Foreign key constraint error saat delete movie di Admin | `app/api/admin/movies/[id]/route.ts` | Saat menghapus film, data terkait di tabel `movie_genres`, `likes`, `reviews`, dan `watchlists` belum dihapus terlebih dahulu sehingga terjadi constraint violation. | Menambahkan query `DELETE` untuk tabel `movie_genres`, `likes`, `reviews`, dan `watchlists` sebelum menghapus data di tabel `movies`. | Selesai |
+| 3 | Nama tabel salah pada delete watchlist | `app/api/admin/movies/[id]/route.ts` | Query menggunakan nama tabel `watchlist` (tanpa 's'), padahal nama tabel yang benar adalah `watchlists`. | Mengubah `DELETE FROM watchlist` menjadi `DELETE FROM watchlists`. | Selesai |
+| 4 | MySQL connection pool leak saat development | `app/lib/db.ts` | Setiap kali Next.js melakukan hot reload, connection pool baru dibuat tanpa menutup yang lama, menyebabkan pool menumpuk. | Menyimpan pool di `global.mysqlPool` agar pool di-reuse saat hot reload dan hanya membuat pool baru jika belum ada. | Selesai |
+
+### Screenshot Bug
+
+![Bug: movieid is not defined](BUG/WhatsApp%20Image%202026-06-23%20at%2003.50.00.jpeg)
+*Error `movieid is not defined` pada komponen MovieHero.tsx*
 
 ---
 
@@ -161,7 +199,6 @@ menyimpan data film yang disukai oleh user
 | movie_id | INT | FOREIGN KEY → movies.id | Film yang disukai |
 | created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu like diberikan |
 ---
-
 ## Struktur Proyek
 
 ```

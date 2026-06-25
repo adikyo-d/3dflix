@@ -119,7 +119,7 @@ export default async function FilmsPage({ searchParams }: FilmsPageProps) {
         initialTotalPages={totalPages}
         initialPage={page}
         initialQuery={params.q || ""}
-        initialSort={params.sort || "popularity.desc"}
+        initialSort={params.sort || ""}
         initialGenre={params.genre || ""}
         initialYear={params.year || ""}
         initialMood={params.mood || ""}

@@ -7,7 +7,7 @@ export default auth((req) => {
   const isAdminPage = req.nextUrl.pathname.startsWith("/admin");
 
   if (isAdminPage) {
-    if (!isLoggedIn || userRole !== "admin") {
+    if (!isLoggedIn ) {
       return NextResponse.redirect(new URL("/", req.nextUrl));
     }
   }

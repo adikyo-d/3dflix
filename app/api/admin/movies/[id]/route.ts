@@ -58,6 +58,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  // 1. Validasi akses admin
   const session = await requireAdmin();
   if (!session) {
     return NextResponse.json({ error: "Akses ditolak" }, { status: 403 });
@@ -66,12 +67,25 @@ export async function DELETE(
   const { id } = await params;
 
   try {
+  
+    await pool.execute("DELETE FROM movie_genres WHERE movie_id = ?", [id]);
+
+    
+    await pool.execute("DELETE FROM likes WHERE movie_id = ?", [id]);
+
+    
     await pool.execute("DELETE FROM reviews WHERE movie_id = ?", [id]);
-    await pool.execute("DELETE FROM watchlist WHERE movie_id = ?", [id]);
+
+
+    await pool.execute("DELETE FROM watchlists WHERE movie_id = ?", [id]);
+
+   
     await pool.execute("DELETE FROM movies WHERE id = ?", [id]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+
+    console.error("DATABASE DELETE ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

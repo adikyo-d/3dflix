@@ -52,7 +52,7 @@ export default function Reviews({ movieId }: ReviewsProps) {
                 </div>
               </div>
               <p className="text-gray-300 leading-relaxed">
-                {review.review_text || "(tanpa teks)"}
+                {review.review_text}
               </p>
             </div>
           ))

@@ -188,7 +188,7 @@ export default function FilmsContent({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    applyFilters({ query, q: query, page: 1 });
+    applyFilters({ query, q: query, page: 100 });
   };
 
   const goToPage = (newPage: number) => {
